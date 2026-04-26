@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img alt="Node >=18.18" src="https://img.shields.io/badge/node-%3E%3D18.18-339933">
+  <img alt="Node 18.18+" src="https://img.shields.io/badge/node-18.18%2B-339933">
   <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue">
   <img alt="Local first" src="https://img.shields.io/badge/local--first-no%20cloud%20upload-0f766e">
   <img alt="Frameworks" src="https://img.shields.io/badge/Codex%20%7C%20Claude%20Code%20%7C%20OpenCode%20%7C%20Cursor-supported-7c3aed">

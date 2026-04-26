@@ -1,8 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Context Doctor logo">
-  <rect width="256" height="256" rx="48" fill="#0f172a"/>
-  <circle cx="128" cy="118" r="70" fill="#e0f2fe"/>
-  <path d="M128 66v104M76 118h104" stroke="#2563eb" stroke-width="22" stroke-linecap="round"/>
-  <path d="M73 184c23 22 87 22 110 0" fill="none" stroke="#22c55e" stroke-width="16" stroke-linecap="round"/>
-  <circle cx="92" cy="98" r="10" fill="#0f172a"/>
-  <circle cx="164" cy="98" r="10" fill="#0f172a"/>
+  <defs>
+    <linearGradient id="bg" x1="38" x2="220" y1="28" y2="232" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#16233f"/>
+      <stop offset="0.55" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#0b3b47"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="68" x2="176" y1="54" y2="168" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ecfeff"/>
+      <stop offset="1" stop-color="#bfdbfe"/>
+    </linearGradient>
+    <linearGradient id="pulse" x1="74" x2="179" y1="121" y2="121" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22c55e"/>
+      <stop offset="0.52" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#020617" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+
+  <rect width="256" height="256" rx="54" fill="url(#bg)"/>
+  <path d="M52 196c26 19 126 19 152 0" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" opacity="0.35"/>
+  <path d="M62 58h132M62 198h132" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.12"/>
+
+  <g filter="url(#shadow)">
+    <circle cx="116" cy="112" r="58" fill="url(#lens)" stroke="#ffffff" stroke-width="8"/>
+    <circle cx="116" cy="112" r="39" fill="none" stroke="#2563eb" stroke-width="4" stroke-dasharray="7 9" opacity="0.32"/>
+    <path d="M72 120h25l9-22 20 48 12-26h20" fill="none" stroke="url(#pulse)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M157 154l45 45" stroke="#e0f2fe" stroke-width="18" stroke-linecap="round"/>
+    <path d="M166 163l36 36" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <path d="M70 68c-10 11-16 26-16 44" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity="0.78"/>
+  <circle cx="179" cy="74" r="7" fill="#22c55e"/>
+  <circle cx="200" cy="91" r="5" fill="#38bdf8"/>
+  <circle cx="188" cy="112" r="4" fill="#7c3aed"/>
 </svg>

@@ -111,5 +111,7 @@ test('renders self-contained HTML report', async () => {
   const html = await fs.readFile(summary.outputPath, 'utf8');
   assert.match(html, /Context Doctor Report/);
   assert.match(html, /__CONTEXT_DOCTOR_DATA__|msg_0006/);
+  assert.match(html, /id="languageSelect"/);
+  assert.match(html, /简体中文/);
   assert.equal(summary.score, annotations.score);
 });

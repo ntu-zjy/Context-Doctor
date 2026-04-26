@@ -20,8 +20,10 @@
 
   <rect x="44" y="238" width="1112" height="58" rx="10" fill="#ffffff" stroke="#d8dee8"/>
   <rect x="72" y="255" width="470" height="24" rx="6" fill="#eef2f7"/>
-  <rect x="850" y="252" width="126" height="30" rx="6" fill="#e0f2fe"/>
-  <rect x="994" y="252" width="126" height="30" rx="6" fill="#fef3c7"/>
+  <rect x="662" y="252" width="126" height="30" rx="6" fill="#e0f2fe"/>
+  <rect x="806" y="252" width="126" height="30" rx="6" fill="#fef3c7"/>
+  <rect x="950" y="252" width="170" height="30" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text x="966" y="272" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#334155">EN / 中文 / 日本語</text>
 
   <line x1="88" y1="330" x2="88" y2="654" stroke="#d8dee8" stroke-width="3"/>
   <circle cx="88" cy="368" r="11" fill="#159447" stroke="#f7f8fb" stroke-width="6"/>

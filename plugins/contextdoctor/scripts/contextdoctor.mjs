@@ -965,6 +965,7 @@ function summarize(messages, annotations, locator, flags, config) {
     frameworkLabel: ADAPTERS[locator.framework]?.label || locator.framework,
     transcriptPath: locator.path,
     transcriptSource: locator.source,
+    reportLanguage: config.reportLanguage || 'en',
     scope: flags.scope || 'all',
     focus: flags.focus || config.focus || null,
     score: annotations.score,

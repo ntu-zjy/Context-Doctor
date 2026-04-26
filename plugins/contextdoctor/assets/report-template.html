@@ -115,6 +115,11 @@
       font-weight: 650;
     }
 
+    .language-select {
+      width: 100%;
+      margin-top: 4px;
+    }
+
     .counts {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -354,26 +359,35 @@
     <div class="wrap">
       <div class="top">
         <section class="score" aria-label="Health score">
-          <div class="label">Context Health</div>
+          <div class="label" id="healthLabel">Context Health</div>
           <div class="score-number" id="scoreNumber">0</div>
           <span class="tier" id="tierPill">Healthy</span>
         </section>
         <section class="meta" aria-label="Report metadata">
           <div class="meta-item">
-            <div class="label">Framework</div>
+            <div class="label" id="frameworkLabel">Framework</div>
             <div class="value" id="framework"></div>
           </div>
           <div class="meta-item">
-            <div class="label">Generated</div>
+            <div class="label" id="generatedLabel">Generated</div>
             <div class="value" id="generatedAt"></div>
           </div>
           <div class="meta-item">
-            <div class="label">Transcript</div>
+            <div class="label" id="transcriptLabel">Transcript</div>
             <div class="value" id="transcriptPath"></div>
           </div>
           <div class="meta-item">
-            <div class="label">Scope</div>
+            <div class="label" id="scopeLabel">Scope</div>
             <div class="value" id="scope"></div>
+          </div>
+          <div class="meta-item">
+            <label class="label" id="languageLabel" for="languageSelect">Language</label>
+            <select id="languageSelect" class="language-select" aria-label="Report language">
+              <option value="en">English</option>
+              <option value="zh">简体中文</option>
+              <option value="ja">日本語</option>
+              <option value="ko">한국어</option>
+            </select>
           </div>
         </section>
       </div>
@@ -385,14 +399,7 @@
     <div class="toolbar-inner">
       <input id="search" type="search" placeholder="Search timeline">
       <select id="categoryFilter" aria-label="Filter by category"></select>
-      <select id="severityFilter" aria-label="Filter by severity">
-        <option value="all">All severities</option>
-        <option value="critical">Critical</option>
-        <option value="high">High</option>
-        <option value="medium">Medium</option>
-        <option value="low">Low</option>
-        <option value="healthy">Healthy only</option>
-      </select>
+      <select id="severityFilter" aria-label="Filter by severity"></select>
     </div>
   </div>
 
@@ -406,9 +413,169 @@
     const $ = (id) => document.getElementById(id);
     const categoryFilter = $('categoryFilter');
     const severityFilter = $('severityFilter');
+    const languageSelect = $('languageSelect');
     const search = $('search');
     const timeline = $('timeline');
     const empty = $('empty');
+    const TRANSLATIONS = {
+      en: {
+        ui: {
+          contextHealth: 'Context Health',
+          framework: 'Framework',
+          generated: 'Generated',
+          transcript: 'Transcript',
+          scope: 'Scope',
+          language: 'Language',
+          searchTimeline: 'Search timeline',
+          filterByCategory: 'Filter by category',
+          filterBySeverity: 'Filter by severity',
+          pollutionCounts: 'Pollution counts',
+          conversationTimeline: 'Conversation timeline',
+          allCategories: 'All categories',
+          flaggedOnly: 'Flagged only',
+          allSeverities: 'All severities',
+          healthyOnly: 'Healthy only',
+          suggestedFix: 'Suggested fix',
+          evidence: 'Evidence',
+          expand: 'Expand',
+          collapse: 'Collapse',
+          chars: 'chars',
+          emptyMessage: 'No messages match the current filters.',
+          emptyMessageText: '(empty message)',
+          focus: 'focus'
+        },
+        tiers: { healthy: 'Healthy', caution: 'Caution', critical: 'Critical' },
+        severities: { critical: 'Critical', high: 'High', medium: 'Medium', low: 'Low' },
+        categories: {
+          stale_state: 'Stale State',
+          conflicting_instructions: 'Conflicting Instructions',
+          tool_noise: 'Tool Noise',
+          task_drift: 'Task Drift',
+          hallucinated_facts: 'Hallucinated Facts',
+          scope_bloat: 'Scope Bloat',
+          persona_drift: 'Persona Drift',
+          skill_conflict: 'Skill Conflict'
+        }
+      },
+      zh: {
+        ui: {
+          contextHealth: '上下文健康度',
+          framework: '框架',
+          generated: '生成时间',
+          transcript: '会话文件',
+          scope: '范围',
+          language: '语言',
+          searchTimeline: '搜索时间线',
+          filterByCategory: '按污染类别筛选',
+          filterBySeverity: '按严重等级筛选',
+          pollutionCounts: '污染统计',
+          conversationTimeline: '会话时间线',
+          allCategories: '全部类别',
+          flaggedOnly: '仅看已标记',
+          allSeverities: '全部等级',
+          healthyOnly: '仅看健康消息',
+          suggestedFix: '建议修复',
+          evidence: '证据',
+          expand: '展开',
+          collapse: '收起',
+          chars: '字符',
+          emptyMessage: '没有消息匹配当前筛选条件。',
+          emptyMessageText: '（空消息）',
+          focus: '关注'
+        },
+        tiers: { healthy: '健康', caution: '警惕', critical: '危险' },
+        severities: { critical: '危险', high: '高', medium: '中', low: '低' },
+        categories: {
+          stale_state: '状态过期',
+          conflicting_instructions: '指令冲突',
+          tool_noise: '工具噪音',
+          task_drift: '任务漂移',
+          hallucinated_facts: '幻觉事实',
+          scope_bloat: '范围膨胀',
+          persona_drift: '角色漂移',
+          skill_conflict: '技能冲突'
+        }
+      },
+      ja: {
+        ui: {
+          contextHealth: 'コンテキスト健全性',
+          framework: 'フレームワーク',
+          generated: '生成日時',
+          transcript: 'Transcript',
+          scope: '範囲',
+          language: '言語',
+          searchTimeline: 'タイムライン検索',
+          filterByCategory: 'カテゴリで絞り込み',
+          filterBySeverity: '重要度で絞り込み',
+          pollutionCounts: '汚染数',
+          conversationTimeline: '会話タイムライン',
+          allCategories: 'すべてのカテゴリ',
+          flaggedOnly: '指摘のみ',
+          allSeverities: 'すべての重要度',
+          healthyOnly: '健全なメッセージのみ',
+          suggestedFix: '修正案',
+          evidence: '根拠',
+          expand: '展開',
+          collapse: '折りたたむ',
+          chars: '文字',
+          emptyMessage: '現在のフィルタに一致するメッセージはありません。',
+          emptyMessageText: '（空のメッセージ）',
+          focus: 'focus'
+        },
+        tiers: { healthy: '健全', caution: '注意', critical: '危険' },
+        severities: { critical: '危険', high: '高', medium: '中', low: '低' },
+        categories: {
+          stale_state: '古い状態',
+          conflicting_instructions: '指示の衝突',
+          tool_noise: 'ツールノイズ',
+          task_drift: 'タスク漂流',
+          hallucinated_facts: '誤情報',
+          scope_bloat: 'スコープ肥大',
+          persona_drift: 'ペルソナ逸脱',
+          skill_conflict: 'スキル衝突'
+        }
+      },
+      ko: {
+        ui: {
+          contextHealth: '컨텍스트 건강도',
+          framework: '프레임워크',
+          generated: '생성 시간',
+          transcript: 'Transcript',
+          scope: '범위',
+          language: '언어',
+          searchTimeline: '타임라인 검색',
+          filterByCategory: '카테고리로 필터',
+          filterBySeverity: '심각도로 필터',
+          pollutionCounts: '오염 카운트',
+          conversationTimeline: '대화 타임라인',
+          allCategories: '모든 카테고리',
+          flaggedOnly: '표시된 항목만',
+          allSeverities: '모든 심각도',
+          healthyOnly: '정상 메시지만',
+          suggestedFix: '수정 제안',
+          evidence: '근거',
+          expand: '펼치기',
+          collapse: '접기',
+          chars: '자',
+          emptyMessage: '현재 필터와 일치하는 메시지가 없습니다.',
+          emptyMessageText: '(빈 메시지)',
+          focus: 'focus'
+        },
+        tiers: { healthy: '정상', caution: '주의', critical: '위험' },
+        severities: { critical: '위험', high: '높음', medium: '중간', low: '낮음' },
+        categories: {
+          stale_state: '오래된 상태',
+          conflicting_instructions: '지시 충돌',
+          tool_noise: '도구 노이즈',
+          task_drift: '작업 이탈',
+          hallucinated_facts: '환각 사실',
+          scope_bloat: '범위 비대',
+          persona_drift: '페르소나 이탈',
+          skill_conflict: '스킬 충돌'
+        }
+      }
+    };
+    let currentLanguage = normalizeLanguage(DATA.reportLanguage || 'en');
 
     function text(value) {
       return value == null ? '' : String(value);
@@ -427,27 +594,82 @@
       return text(value).replaceAll('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase());
     }
 
+    function normalizeLanguage(value) {
+      const normalized = text(value).toLowerCase();
+      if (normalized.startsWith('zh')) return 'zh';
+      if (normalized.startsWith('ja')) return 'ja';
+      if (normalized.startsWith('ko')) return 'ko';
+      return 'en';
+    }
+
+    function locale() {
+      return TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
+    }
+
+    function ui(key) {
+      return locale().ui[key] || TRANSLATIONS.en.ui[key] || key;
+    }
+
+    function categoryLabel(key) {
+      return locale().categories[key] || DATA.categories[key]?.label || titleCase(key);
+    }
+
+    function severityLabel(key) {
+      return locale().severities[key] || titleCase(key);
+    }
+
+    function tierLabel(key) {
+      return locale().tiers[key] || titleCase(key);
+    }
+
+    function scopeText() {
+      return DATA.scope + (DATA.focus ? `, ${ui('focus')}: ${categoryLabel(DATA.focus)}` : '');
+    }
+
     function renderTop() {
+      document.documentElement.lang = currentLanguage;
+      $('healthLabel').textContent = ui('contextHealth');
       $('scoreNumber').textContent = DATA.score;
-      $('tierPill').textContent = titleCase(DATA.tier);
+      $('tierPill').textContent = tierLabel(DATA.tier);
       $('tierPill').className = `tier ${DATA.tier}`;
+      $('frameworkLabel').textContent = ui('framework');
+      $('generatedLabel').textContent = ui('generated');
+      $('transcriptLabel').textContent = ui('transcript');
+      $('scopeLabel').textContent = ui('scope');
+      $('languageLabel').textContent = ui('language');
       $('framework').textContent = DATA.frameworkLabel || DATA.framework;
-      $('generatedAt').textContent = new Date(DATA.generatedAt).toLocaleString();
+      $('generatedAt').textContent = new Date(DATA.generatedAt).toLocaleString(currentLanguage === 'en' ? undefined : currentLanguage);
       $('transcriptPath').textContent = DATA.transcriptPath;
-      $('scope').textContent = DATA.scope + (DATA.focus ? `, focus: ${DATA.focus}` : '');
+      $('scope').textContent = scopeText();
+      languageSelect.value = currentLanguage;
+      search.placeholder = ui('searchTimeline');
+      categoryFilter.setAttribute('aria-label', ui('filterByCategory'));
+      severityFilter.setAttribute('aria-label', ui('filterBySeverity'));
+      $('counts').setAttribute('aria-label', ui('pollutionCounts'));
+      $('timeline').setAttribute('aria-label', ui('conversationTimeline'));
+      empty.textContent = ui('emptyMessage');
 
       const counts = $('counts');
       counts.innerHTML = Object.entries(DATA.categories).map(([key, category]) => `
         <div class="count-card" data-category="${key}">
-          <div class="label">${escapeHtml(category.label)}</div>
+          <div class="label">${escapeHtml(categoryLabel(key))}</div>
           <strong>${DATA.countsByCategory[key] || 0}</strong>
         </div>
       `).join('');
 
       categoryFilter.innerHTML = [
-        '<option value="all">All categories</option>',
-        '<option value="flagged">Flagged only</option>',
-        ...Object.entries(DATA.categories).map(([key, category]) => `<option value="${key}">${escapeHtml(category.label)}</option>`)
+        `<option value="all">${escapeHtml(ui('allCategories'))}</option>`,
+        `<option value="flagged">${escapeHtml(ui('flaggedOnly'))}</option>`,
+        ...Object.keys(DATA.categories).map((key) => `<option value="${key}">${escapeHtml(categoryLabel(key))}</option>`)
+      ].join('');
+
+      severityFilter.innerHTML = [
+        `<option value="all">${escapeHtml(ui('allSeverities'))}</option>`,
+        `<option value="critical">${escapeHtml(severityLabel('critical'))}</option>`,
+        `<option value="high">${escapeHtml(severityLabel('high'))}</option>`,
+        `<option value="medium">${escapeHtml(severityLabel('medium'))}</option>`,
+        `<option value="low">${escapeHtml(severityLabel('low'))}</option>`,
+        `<option value="healthy">${escapeHtml(ui('healthyOnly'))}</option>`
       ].join('');
     }
 
@@ -455,13 +677,13 @@
       timeline.innerHTML = DATA.messages.map((message) => {
         const finding = message.finding;
         const flaggedClass = finding ? `flagged flag-${finding.severity}` : '';
-        const badge = finding ? `<div class="badge ${finding.severity}">${escapeHtml(DATA.categories[finding.type].label)}</div>` : '';
+        const badge = finding ? `<div class="badge ${finding.severity}">${escapeHtml(categoryLabel(finding.type))}</div>` : '';
         const evidence = finding ? `
           <aside class="evidence">
-            <div><strong>${escapeHtml(titleCase(finding.severity))}</strong>${escapeHtml(finding.reason)}</div>
-            <strong>Suggested fix</strong>
+            <div><strong>${escapeHtml(severityLabel(finding.severity))}</strong>${escapeHtml(finding.reason)}</div>
+            <strong>${escapeHtml(ui('suggestedFix'))}</strong>
             <div>${escapeHtml(finding.fix)}</div>
-            ${finding.evidence ? `<strong>Evidence</strong><div>${escapeHtml(finding.evidence)}</div>` : ''}
+            ${finding.evidence ? `<strong>${escapeHtml(ui('evidence'))}</strong><div>${escapeHtml(finding.evidence)}</div>` : ''}
           </aside>
         ` : '';
         const long = message.charCount > 2400 || ['tool_result', 'tool_call'].includes(message.kind);
@@ -476,8 +698,8 @@
               <span class="role ${escapeHtml(message.role)}">${escapeHtml(message.role)}</span>
               <span class="message-id">${escapeHtml(message.id)} · ${escapeHtml(message.kind)}${message.toolName ? ` · ${escapeHtml(message.toolName)}` : ''}</span>
             </div>
-            <pre>${escapeHtml(message.text || '(empty message)')}</pre>
-            ${long ? `<div class="expand-row"><button type="button" data-expand>Expand</button><span class="chars">${message.charCount.toLocaleString()} chars</span></div>` : ''}
+            <pre>${escapeHtml(message.text || ui('emptyMessageText'))}</pre>
+            ${long ? `<div class="expand-row"><button type="button" data-expand>${escapeHtml(ui('expand'))}</button><span class="chars">${message.charCount.toLocaleString()} ${escapeHtml(ui('chars'))}</span></div>` : ''}
             ${evidence}
           </article>
         `;
@@ -486,7 +708,7 @@
         button.addEventListener('click', () => {
           const card = button.closest('.message');
           const collapsed = card.classList.toggle('collapsed');
-          button.textContent = collapsed ? 'Expand' : 'Collapse';
+          button.textContent = collapsed ? ui('expand') : ui('collapse');
         });
       });
     }
@@ -517,6 +739,16 @@
     categoryFilter.addEventListener('change', applyFilters);
     severityFilter.addEventListener('change', applyFilters);
     search.addEventListener('input', applyFilters);
+    languageSelect.addEventListener('change', () => {
+      currentLanguage = normalizeLanguage(languageSelect.value);
+      const selectedCategory = categoryFilter.value;
+      const selectedSeverity = severityFilter.value;
+      renderTop();
+      categoryFilter.value = selectedCategory;
+      severityFilter.value = selectedSeverity;
+      renderTimeline();
+      applyFilters();
+    });
   </script>
 </body>
 </html>
