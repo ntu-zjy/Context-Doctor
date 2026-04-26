@@ -5,8 +5,8 @@
 <h1 align="center">Context Doctor</h1>
 
 <p align="center">
-  The <code>/contextdoctor</code> command for long coding-agent sessions.
-  Detect context rot before your agent starts touching the wrong file, following stale instructions, or repeating old mistakes.
+  When your coding agent starts mixing up old tasks, wrong files, and failed commands,
+  run <code>/contextdoctor</code> to see what in the conversation is confusing it.
 </p>
 
 <p align="center">
@@ -25,18 +25,42 @@
 
 ---
 
-## Why This Exists
+## What Problem Does This Solve?
 
-Coding agents get weird after long sessions. The transcript quietly fills with failed commands, stale file paths, abandoned subtasks, contradictory asks, unrelated skills, and corrected hallucinations. Humans feel the degradation, but it is hard to point at the exact cause.
+You have probably seen this happen:
 
-Context Doctor turns that invisible context rot into a browser report:
+- You debugged one bug, then switched to a new feature.
+- A command failed, but its long stack trace is still in the chat.
+- You corrected the agent once, but the wrong assumption is still nearby.
+- You loaded a skill for an earlier task, and now the agent is following it for the wrong job.
+- After an hour, the agent starts editing the wrong file or repeating something you already fixed.
 
-- a health score from 0 to 100
-- severity-tagged findings with concrete fixes
-- a full timeline of user, assistant, tool call, and tool result messages
-- filters for the eight pollution categories
-- hover evidence for every flagged turn
-- self-contained HTML that works offline
+Context Doctor checks the conversation itself. It reads the local session transcript, finds the messages most likely to confuse the agent, and turns them into a clear browser report.
+
+The report answers three simple questions:
+
+- What is polluting this session?
+- How serious is it?
+- What should I restate, ignore, or move into a fresh session?
+
+## What You Get
+
+- A 0-100 health score for the current agent session
+- A timeline of user messages, assistant replies, tool calls, and tool results
+- Red, orange, and yellow markers on suspicious messages
+- Plain-language reasons and suggested fixes
+- Filters for common problems like failed commands, stale file paths, old tasks, and conflicting instructions
+- A self-contained HTML file you can open offline
+
+## When To Run It
+
+Run `/contextdoctor` when:
+
+- the agent keeps referencing an old file or task
+- responses suddenly feel worse after a long session
+- several tool calls failed and the chat is noisy
+- you switched tasks without starting a new conversation
+- the agent seems to ignore your latest instructions
 
 ## Demo
 
