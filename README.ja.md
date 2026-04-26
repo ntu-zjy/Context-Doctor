@@ -5,8 +5,9 @@
 <h1 align="center">Context Doctor</h1>
 
 <p align="center">
-  コーディングエージェントが古いタスク、間違ったファイル、失敗したコマンドを混ぜ始めたら、
-  <code>/contextdoctor</code> で会話のどこが邪魔をしているか確認できます。
+  コーディングエージェントの会話にある <strong>context pollution</strong> を見つける
+  ローカル <code>/contextdoctor</code> コマンドです。
+  古いメッセージ、失敗したツール、古いファイルパス、矛盾した指示がエージェントを混乱させていないか確認できます。
 </p>
 
 <p align="center">
@@ -19,13 +20,22 @@
 <p align="center">
   <img alt="Node 18.18+" src="https://img.shields.io/badge/node-18.18%2B-339933">
   <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue">
+  <img alt="Context pollution" src="https://img.shields.io/badge/solves-context%20pollution-f97316">
   <img alt="Local first" src="https://img.shields.io/badge/local--first-no%20cloud%20upload-0f766e">
   <img alt="Frameworks" src="https://img.shields.io/badge/Codex%20%7C%20Claude%20Code%20%7C%20OpenCode%20%7C%20Cursor-supported-7c3aed">
 </p>
 
 ---
 
-## どんな問題を解決するか
+## 解決するのは Context Pollution です
+
+Context pollution とは、コーディングエージェントの会話に、今のタスクにはもう役に立たない情報が残りすぎている状態です。
+
+古い要求、失敗したコマンド出力、古いファイルパス、訂正済みの誤解、無関係な skill、前のタスクの説明などが原因になります。
+
+それらが会話に残っていると、エージェントはまだ正しい情報として扱ってしまうことがあります。
+
+## どんな形で現れるか
 
 こんな経験はありませんか。
 
@@ -35,7 +45,7 @@
 - 前の作業で読み込んだ skill を、今の作業にも使い続けている。
 - 1 時間ほど経つと、エージェントが間違ったファイルを編集し始める。
 
-Context Doctor が調べるのはコードではなく、この会話そのものです。ローカルの transcript を読み、エージェントを混乱させそうなメッセージを見つけて、ブラウザレポートにします。
+Context Doctor が調べるのはコードではなく、この会話そのものです。ローカルの transcript を読み、現在のタスクを汚染しそうなメッセージを見つけて、ブラウザレポートにします。
 
 レポートは次の 3 つに答えます。
 

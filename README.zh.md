@@ -5,8 +5,8 @@
 <h1 align="center">Context Doctor</h1>
 
 <p align="center">
-  当你的 Coding Agent 开始混淆旧任务、错文件、失败命令时，
-  运行 <code>/contextdoctor</code>，看看是哪几段对话在干扰它。
+  一个本地 <code>/contextdoctor</code> 命令，专门发现 Coding Agent 会话里的<strong>上下文污染</strong>。
+  它会告诉你：哪些旧消息、失败工具、过期文件路径或冲突指令正在误导 Agent。
 </p>
 
 <p align="center">
@@ -19,13 +19,22 @@
 <p align="center">
   <img alt="Node 18.18+" src="https://img.shields.io/badge/node-18.18%2B-339933">
   <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue">
+  <img alt="上下文污染" src="https://img.shields.io/badge/solves-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%B1%A1%E6%9F%93-f97316">
   <img alt="Local first" src="https://img.shields.io/badge/local--first-no%20cloud%20upload-0f766e">
   <img alt="Frameworks" src="https://img.shields.io/badge/Codex%20%7C%20Claude%20Code%20%7C%20OpenCode%20%7C%20Cursor-supported-7c3aed">
 </p>
 
 ---
 
-## 它解决什么问题？
+## 它解决的是上下文污染
+
+上下文污染指的是：一段 Code Agent 会话里，留下了太多对当前任务没帮助、甚至会误导 Agent 的旧信息。
+
+它可能是旧需求、失败命令的输出、过期文件路径、已经纠正过的错误、无关 skill，或者上一个任务留下来的描述。
+
+这些内容还在当前对话里时，Agent 可能会把它们当成仍然正确的信息来使用。
+
+## 上下文污染通常长什么样？
 
 你很可能遇到过这种情况：
 
@@ -35,7 +44,7 @@
 - 你为上一个任务加载了某个 skill，现在 Agent 还在照着它做新任务。
 - 聊了一个小时后，Agent 开始改错文件，或者重复你已经修好的问题。
 
-Context Doctor 检查的不是代码，而是“这段会话本身”。它读取本地 transcript，找出最可能误导 Agent 的消息，然后生成一份浏览器报告。
+Context Doctor 检查的不是代码，而是“这段会话本身”。它读取本地 transcript，找出最可能污染当前任务的消息，然后生成一份浏览器报告。
 
 这份报告回答三个简单问题：
 

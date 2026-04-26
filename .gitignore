@@ -1,4 +1,5 @@
 .contextdoctor/
 .playwright-cli/
+.DS_Store
 node_modules/
 npm-debug.log*

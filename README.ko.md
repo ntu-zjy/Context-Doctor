@@ -5,8 +5,9 @@
 <h1 align="center">Context Doctor</h1>
 
 <p align="center">
-  코딩 에이전트가 이전 작업, 잘못된 파일, 실패한 명령을 섞기 시작하면
-  <code>/contextdoctor</code>로 어떤 대화가 에이전트를 헷갈리게 하는지 확인하세요.
+  코딩 에이전트 대화의 <strong>context pollution</strong>을 찾는
+  로컬 <code>/contextdoctor</code> 명령입니다.
+  오래된 메시지, 실패한 도구, 낡은 파일 경로, 충돌하는 지시가 에이전트를 헷갈리게 하는지 보여줍니다.
 </p>
 
 <p align="center">
@@ -19,13 +20,22 @@
 <p align="center">
   <img alt="Node 18.18+" src="https://img.shields.io/badge/node-18.18%2B-339933">
   <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue">
+  <img alt="Context pollution" src="https://img.shields.io/badge/solves-context%20pollution-f97316">
   <img alt="Local first" src="https://img.shields.io/badge/local--first-no%20cloud%20upload-0f766e">
   <img alt="Frameworks" src="https://img.shields.io/badge/Codex%20%7C%20Claude%20Code%20%7C%20OpenCode%20%7C%20Cursor-supported-7c3aed">
 </p>
 
 ---
 
-## 어떤 문제를 해결하나요?
+## 해결하는 문제는 Context Pollution입니다
+
+Context pollution은 코딩 에이전트 대화 안에 현재 작업에 도움이 되지 않거나 오히려 방해되는 정보가 너무 많이 남아 있는 상태입니다.
+
+오래된 요구사항, 실패한 명령 출력, 낡은 파일 경로, 이미 정정한 오해, 관련 없는 skill, 이전 작업 설명 등이 원인이 될 수 있습니다.
+
+이런 내용이 대화에 남아 있으면 에이전트가 아직 유효한 정보처럼 사용해 버릴 수 있습니다.
+
+## 어떤 모습으로 나타나나요?
 
 이런 상황을 겪어본 적이 있을 겁니다.
 
@@ -35,7 +45,7 @@
 - 이전 작업에서 로드한 skill을 지금 작업에도 계속 따르고 있습니다.
 - 한 시간쯤 지나면 에이전트가 잘못된 파일을 수정하기 시작합니다.
 
-Context Doctor는 코드를 검사하는 도구가 아니라, 이 대화 자체를 검사하는 도구입니다. 로컬 transcript를 읽고 에이전트를 혼란스럽게 만들 가능성이 높은 메시지를 찾아 브라우저 리포트로 보여줍니다.
+Context Doctor는 코드를 검사하는 도구가 아니라, 이 대화 자체를 검사하는 도구입니다. 로컬 transcript를 읽고 현재 작업을 오염시킬 가능성이 높은 메시지를 찾아 브라우저 리포트로 보여줍니다.
 
 리포트는 세 가지 질문에 답합니다.
 

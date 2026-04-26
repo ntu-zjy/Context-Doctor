@@ -5,8 +5,8 @@
 <h1 align="center">Context Doctor</h1>
 
 <p align="center">
-  When your coding agent starts mixing up old tasks, wrong files, and failed commands,
-  run <code>/contextdoctor</code> to see what in the conversation is confusing it.
+  A local <code>/contextdoctor</code> command for finding <strong>context pollution</strong> in coding-agent chats.
+  It shows which old messages, failed tools, stale files, or conflicting instructions are confusing your agent.
 </p>
 
 <p align="center">
@@ -19,13 +19,22 @@
 <p align="center">
   <img alt="Node 18.18+" src="https://img.shields.io/badge/node-18.18%2B-339933">
   <img alt="License MIT" src="https://img.shields.io/badge/license-MIT-blue">
+  <img alt="Context pollution" src="https://img.shields.io/badge/solves-context%20pollution-f97316">
   <img alt="Local first" src="https://img.shields.io/badge/local--first-no%20cloud%20upload-0f766e">
   <img alt="Frameworks" src="https://img.shields.io/badge/Codex%20%7C%20Claude%20Code%20%7C%20OpenCode%20%7C%20Cursor-supported-7c3aed">
 </p>
 
 ---
 
-## What Problem Does This Solve?
+## It Solves Context Pollution
+
+Context pollution is what happens when a coding-agent conversation contains too much leftover information that no longer helps the current task.
+
+It can be an old requirement, a failed command output, a stale file path, a corrected mistake, an unrelated skill, or a previous task that should no longer matter.
+
+When those messages stay in the active conversation, the agent may start using them as if they were still true.
+
+## What Does That Look Like?
 
 You have probably seen this happen:
 
@@ -35,7 +44,7 @@ You have probably seen this happen:
 - You loaded a skill for an earlier task, and now the agent is following it for the wrong job.
 - After an hour, the agent starts editing the wrong file or repeating something you already fixed.
 
-Context Doctor checks the conversation itself. It reads the local session transcript, finds the messages most likely to confuse the agent, and turns them into a clear browser report.
+Context Doctor checks the conversation itself. It reads the local session transcript, finds the messages most likely to pollute the current task, and turns them into a clear browser report.
 
 The report answers three simple questions:
 
