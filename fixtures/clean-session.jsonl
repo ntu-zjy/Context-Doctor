@@ -1,0 +1,4 @@
+{"id":"msg_0001","role":"system","content":"You are a coding assistant."}
+{"id":"msg_0002","role":"user","content":"Please add a small README section describing how to run tests."}
+{"id":"msg_0003","role":"assistant","content":"I inspected the package scripts and added the README section."}
+{"id":"msg_0004","role":"tool_result","content":"npm test\n\n> project@1.0.0 test\n> node --test\n\nok 1 - all tests passed"}

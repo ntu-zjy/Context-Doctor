@@ -1,0 +1,29 @@
+{
+  "name": "context-doctor",
+  "version": "0.1.0",
+  "description": "The /contextdoctor command for detecting context rot in long coding-agent sessions.",
+  "type": "module",
+  "bin": {
+    "contextdoctor": "./plugins/contextdoctor/scripts/contextdoctor.mjs"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "demo": "node plugins/contextdoctor/scripts/contextdoctor.mjs run --transcript fixtures/polluted-session.jsonl --framework=codex --no-open"
+  },
+  "keywords": [
+    "context",
+    "context-rot",
+    "context-pollution",
+    "agent",
+    "agent-diagnostics",
+    "diagnostics",
+    "codex",
+    "claude-code",
+    "cursor",
+    "opencode"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.18"
+  }
+}

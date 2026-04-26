@@ -1,0 +1,20 @@
+{
+  "name": "context-doctor-local",
+  "interface": {
+    "displayName": "Context Doctor Local"
+  },
+  "plugins": [
+    {
+      "name": "contextdoctor",
+      "source": {
+        "source": "local",
+        "path": "./plugins/contextdoctor"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

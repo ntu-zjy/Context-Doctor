@@ -1,0 +1,20 @@
+{
+  "name": "contextdoctor",
+  "displayName": "Context Doctor",
+  "description": "Detect context rot in long coding-agent sessions and generate local HTML health reports.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Context Doctor Maintainers"
+  },
+  "homepage": "https://github.com/contextdoctor/context-doctor",
+  "repository": "https://github.com/contextdoctor/context-doctor",
+  "license": "MIT",
+  "keywords": [
+    "context",
+    "diagnostics",
+    "cursor",
+    "agent"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/"
+}

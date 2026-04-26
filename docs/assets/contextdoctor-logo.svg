@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Context Doctor logo">
+  <rect width="256" height="256" rx="48" fill="#0f172a"/>
+  <circle cx="128" cy="118" r="70" fill="#e0f2fe"/>
+  <path d="M128 66v104M76 118h104" stroke="#2563eb" stroke-width="22" stroke-linecap="round"/>
+  <path d="M73 184c23 22 87 22 110 0" fill="none" stroke="#22c55e" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="92" cy="98" r="10" fill="#0f172a"/>
+  <circle cx="164" cy="98" r="10" fill="#0f172a"/>
+</svg>

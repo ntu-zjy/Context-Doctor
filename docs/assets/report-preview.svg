@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Context Doctor report preview">
+  <rect width="1200" height="720" rx="28" fill="#f7f8fb"/>
+  <rect x="44" y="42" width="1112" height="172" rx="12" fill="#ffffff" stroke="#d8dee8"/>
+  <text x="78" y="88" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#657386">CONTEXT HEALTH</text>
+  <text x="78" y="156" font-family="Arial, sans-serif" font-size="74" font-weight="800" fill="#8b1111">42</text>
+  <rect x="204" y="116" width="94" height="34" rx="17" fill="#fde8e8"/>
+  <text x="222" y="139" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#8b1111">Critical</text>
+  <rect x="360" y="70" width="168" height="92" rx="10" fill="#ffffff" stroke="#d8dee8"/>
+  <text x="382" y="102" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#657386">TOOL NOISE</text>
+  <text x="382" y="146" font-family="Arial, sans-serif" font-size="42" font-weight="800" fill="#17202a">3</text>
+  <rect x="548" y="70" width="168" height="92" rx="10" fill="#ffffff" stroke="#d8dee8"/>
+  <text x="570" y="102" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#657386">STALE STATE</text>
+  <text x="570" y="146" font-family="Arial, sans-serif" font-size="42" font-weight="800" fill="#17202a">2</text>
+  <rect x="736" y="70" width="168" height="92" rx="10" fill="#ffffff" stroke="#d8dee8"/>
+  <text x="758" y="102" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#657386">SKILL CONFLICT</text>
+  <text x="758" y="146" font-family="Arial, sans-serif" font-size="42" font-weight="800" fill="#17202a">1</text>
+  <rect x="924" y="70" width="168" height="92" rx="10" fill="#ffffff" stroke="#d8dee8"/>
+  <text x="946" y="102" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#657386">TASK DRIFT</text>
+  <text x="946" y="146" font-family="Arial, sans-serif" font-size="42" font-weight="800" fill="#17202a">1</text>
+
+  <rect x="44" y="238" width="1112" height="58" rx="10" fill="#ffffff" stroke="#d8dee8"/>
+  <rect x="72" y="255" width="470" height="24" rx="6" fill="#eef2f7"/>
+  <rect x="850" y="252" width="126" height="30" rx="6" fill="#e0f2fe"/>
+  <rect x="994" y="252" width="126" height="30" rx="6" fill="#fef3c7"/>
+
+  <line x1="88" y1="330" x2="88" y2="654" stroke="#d8dee8" stroke-width="3"/>
+  <circle cx="88" cy="368" r="11" fill="#159447" stroke="#f7f8fb" stroke-width="6"/>
+  <rect x="122" y="330" width="980" height="76" rx="10" fill="#ffffff" stroke="#159447" stroke-width="3"/>
+  <rect x="148" y="352" width="74" height="24" rx="12" fill="#2563eb"/>
+  <text x="166" y="369" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#ffffff">user</text>
+  <text x="244" y="369" font-family="Arial, sans-serif" font-size="16" fill="#17202a">msg_0041 · current implementation request</text>
+
+  <circle cx="88" cy="470" r="11" fill="#d97706" stroke="#f7f8fb" stroke-width="6"/>
+  <rect x="122" y="432" width="980" height="96" rx="10" fill="#ffffff" stroke="#d97706" stroke-width="3"/>
+  <rect x="148" y="454" width="104" height="24" rx="12" fill="#0f766e"/>
+  <text x="164" y="471" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#ffffff">tool_result</text>
+  <text x="274" y="471" font-family="Arial, sans-serif" font-size="16" fill="#17202a">Traceback and missing file path still in context</text>
+  <rect x="930" y="447" width="132" height="28" rx="6" fill="#d97706"/>
+  <text x="948" y="466" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Tool Noise</text>
+
+  <circle cx="88" cy="592" r="11" fill="#cf2929" stroke="#f7f8fb" stroke-width="6"/>
+  <rect x="122" y="554" width="980" height="96" rx="10" fill="#ffffff" stroke="#cf2929" stroke-width="3"/>
+  <rect x="148" y="576" width="94" height="24" rx="12" fill="#475569"/>
+  <text x="162" y="593" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#ffffff">assistant</text>
+  <text x="264" y="593" font-family="Arial, sans-serif" font-size="16" fill="#17202a">Loaded unrelated skills for the current task</text>
+  <rect x="904" y="569" width="158" height="28" rx="6" fill="#cf2929"/>
+  <text x="922" y="588" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Skill Conflict</text>
+</svg>

@@ -1,0 +1,28 @@
+{
+  "watchedDimensions": [
+    "stale_state",
+    "conflicting_instructions",
+    "tool_noise",
+    "task_drift",
+    "hallucinated_facts",
+    "scope_bloat",
+    "persona_drift",
+    "skill_conflict"
+  ],
+  "severityPenalty": {
+    "critical": 25,
+    "high": 15,
+    "medium": 8,
+    "low": 3
+  },
+  "tierThresholds": {
+    "healthy": 80,
+    "caution": 50
+  },
+  "recentTurns": 50,
+  "reportLanguage": "en",
+  "autoOpen": true,
+  "longToolOutputChars": 12000,
+  "scopeBloatChars": 20000,
+  "maxFindingsPerCategory": 12
+}
