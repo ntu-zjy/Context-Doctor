@@ -33,7 +33,8 @@ When using AI Agents (Claude Code, Codex, Cursor, etc.), have you ever encounter
 
 - 🔍 **Smart Detection** - Automatically identifies 3 types of pollution: Skill conflicts, instruction contradictions, error accumulation
 - 📊 **Visual Reports** - Beautiful HTML reports using the Starbucks Design System
-- 🌍 **Multi-language Support** - Chinese, English, Japanese, Korean
+- 🌍 **Multi-language Support** - Chinese, English, Japanese, Korean with in-report language switching
+- 📅 **Timestamp Management** - Reports auto-saved to `~/.contextdoctor/reports/`, sorted by time
 - 🔧 **One-click Repair** - Not only detects problems but also provides specific fixes
 - 🚀 **Minimal Installation** - One command to install across all supported Agent frameworks
 - 🎨 **Framework Flexibility** - Supports Claude Code, Codex CLI, Cursor, OpenCode/Crush
@@ -42,44 +43,57 @@ When using AI Agents (Claude Code, Codex, Cursor, etc.), have you ever encounter
 
 ## 📦 Installation
 
-### Quick Install (Recommended)
+### Option 1: Automated Installation Script
 
 ```bash
-curl -fsSL https://contextdoctor.dev/install.sh | bash
+# After downloading the project, run the install script
+node scripts/install.mjs
 ```
 
-### Manual Installation
+### Option 2: Manual Installation
 
 #### Claude Code
 
 ```bash
+# Create skill directories
 mkdir -p ~/.claude/skills/contextdoctor
-curl -o ~/.claude/skills/contextdoctor/SKILL.md \
-  https://raw.githubusercontent.com/contextdoctor/contextdoctor/main/plugins/contextdoctor/skills/contextdoctor/SKILL.md
+mkdir -p ~/.claude/skills/repair
+
+# Copy skill files (assuming you're in the project directory)
+cp plugins/contextdoctor/skills/contextdoctor/SKILL.md ~/.claude/skills/contextdoctor/
+cp plugins/contextdoctor/skills/repair/SKILL.md ~/.claude/skills/repair/
 ```
 
 #### Codex CLI
 
 ```bash
-mkdir -p ~/.codex
-curl -o ~/.codex/codex.md \
-  https://raw.githubusercontent.com/contextdoctor/contextdoctor/main/plugins/contextdoctor/.opencode/INSTALL.md
+# Create global skill directories
+mkdir -p ~/.agents/skills/contextdoctor
+mkdir -p ~/.agents/skills/repair
+
+# Copy skill files
+cp plugins/contextdoctor/skills/contextdoctor/SKILL.md ~/.agents/skills/contextdoctor/
+cp plugins/contextdoctor/skills/repair/SKILL.md ~/.agents/skills/repair/
 ```
 
 #### Cursor
 
 ```bash
+# Create commands directory
 mkdir -p ~/.cursor/commands
-curl -o ~/.cursor/commands/contextdoctor.json \
-  https://raw.githubusercontent.com/contextdoctor/contextdoctor/main/plugins/contextdoctor/.cursor-plugin/contextdoctor.json
+
+# Copy command configuration
+cp plugins/contextdoctor/.cursor-plugin/plugin.json ~/.cursor/commands/contextdoctor.json
 ```
 
 #### OpenCode / Crush
 
 ```bash
+# Create commands directory
 mkdir -p ~/.config/opencode/commands
-curl -o ~/.config/opencode/commands/contextdoctor.md \
-  https://raw.githubusercontent.com/contextdoctor/contextdoctor/main/plugins/contextdoctor/commands/contextdoctor.md
+
+# Copy command file
+cp plugins/contextdoctor/commands/contextdoctor.md ~/.config/opencode/commands/
 ```
 
 ---
@@ -114,11 +128,33 @@ In addition to the detection report, provides:
 ## 📊 Report Preview
 
 <p align="center">
-  <img src="docs/assets/report-preview.svg" width="600" alt="Report Preview">
+  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="Health Score Overview">
+  <br>
+  <em>Comprehensive health score overview — grasp context status at a glance</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="Multi-language Switching">
+  <br>
+  <em>Multi-language interface — switch between Chinese/English/Japanese/Korean with one click</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-33.png" width="800" alt="Issue Detail List">
+  <br>
+  <em>Issue detail list — tiered display with Red (Critical), Gold (Warning), Green (Suggestion)</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="Repair Solutions">
+  <br>
+  <em>/repair command — provides specific, ready-to-use fix solutions</em>
 </p>
 
 Report Features:
 - 🎨 **Starbucks Design System** - Warm color tones, comfortable reading experience
+- 🌍 **Multi-language Interface** - Chinese/English/Japanese/Korean with one-click switching
+- 📅 **Timestamp Naming** - Auto-saved to `~/.contextdoctor/reports/` for history tracking
 - 📱 **Responsive Layout** - Supports desktop and mobile devices
 - 🌈 **Severity Color Coding** - Red (Critical), Gold (Warning), Green (Suggestion)
 - 📈 **Dynamic Charts** - Intuitive problem distribution visualization
@@ -130,7 +166,7 @@ Report Features:
 | Framework | Installation | Commands |
 |-----------|--------------|----------|
 | Claude Code | Skill system | `/contextdoctor`, `/repair` |
-| OpenAI Codex | `codex.md` + `agents/` | `/contextdoctor`, `/repair` |
+| OpenAI Codex | Skills system (`.agents/skills/`) | `$contextdoctor`, `$repair` |
 | Cursor | Custom Commands | `/contextdoctor`, `/repair` |
 | OpenCode | `commands/` directory | `/contextdoctor`, `/repair` |
 | Crush | JSON config | `contextdoctor`, `repair` |

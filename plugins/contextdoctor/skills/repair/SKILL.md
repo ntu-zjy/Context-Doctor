@@ -2,10 +2,9 @@
 name: repair
 description: 不仅检查当前上下文的污染，输出HTML可视化报告，还提供自动修复方案。
 when_to_use: 用户明确需要修复建议时；检测到严重污染需要立即处理时；用户输入"/repair"命令时。
-argument-hint: '[输出文件路径] [--auto-fix]'
+argument-hint: '[--lang=zh|en|ja|ko] [--output=自定义路径] [--auto-fix]'
 disable-model-invocation: false
 allowed-tools: Read Write Bash Glob Grep
-model: sonnet
 effort: high
 ---
 

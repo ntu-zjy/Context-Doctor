@@ -5,11 +5,30 @@
  * 上下文污染检测与修复工具
  */
 
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { homedir } from 'os';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// 报告保存目录
+const REPORTS_DIR = resolve(homedir(), '.contextdoctor/reports');
+
+// 确保报告目录存在
+function ensureReportsDir() {
+  if (!existsSync(REPORTS_DIR)) {
+    mkdirSync(REPORTS_DIR, { recursive: true });
+  }
+  return REPORTS_DIR;
+}
+
+// 生成带时间戳的文件名
+function generateReportFilename(command, lang) {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  const type = command === 'repair' ? 'repair' : 'report';
+  return `context-doctor-${type}-${timestamp}-${lang}.html`;
+}
 
 // 国际化文本
 const i18n = {
@@ -176,6 +195,72 @@ class ContextDoctor {
     return circumference * (1 - this.score / 100);
   }
 
+  // 为指定语言生成 issues 列表（带翻译标签）
+  getIssuesForLang(lang) {
+    const langText = i18n[lang] || i18n.zh;
+    const typeLabels = {
+      zh: { skill: '技能', conflict: '冲突', error: '错误' },
+      en: { skill: 'Skill', conflict: 'Conflict', error: 'Error' },
+      ja: { skill: 'スキル', conflict: '衝突', error: 'エラー' },
+      ko: { skill: '스킬', conflict: '충돌', error: '오류' }
+    };
+    const impactLabel = lang === 'zh' ? '影响' : lang === 'en' ? 'Impact' : lang === 'ja' ? '影響' : '영향';
+    return this.issues.map(issue => ({
+      ...issue,
+      typeLabel: (typeLabels[lang] || typeLabels.zh)[issue.type] || issue.type,
+      severityLabel: langText.scoreLabels[issue.severity] || issue.severity,
+      impactLabel
+    }));
+  }
+
+  // 为指定语言生成修复方案
+  getFixesForLang(lang) {
+    const langIssues = this.getIssuesForLang(lang);
+    const codeComment = lang === 'zh' ? '// 建议重置相关上下文段落\n// 位置: ' :
+                        lang === 'en' ? '// Recommended: reset the related context segment\n// Location: ' :
+                        lang === 'ja' ? '// 関連するコンテキストセグメントのリセットを推奨\n// 場所: ' :
+                        '// 관련 컨텍스트 세그먼트 재설정 권장\n// 위치: ';
+    return langIssues.map((issue, index) => ({
+      number: index + 1,
+      title: `${issue.title} - ${issue.severityLabel}`,
+      description: issue.description,
+      code: issue.severity === 'critical' ? `${codeComment}${issue.location}` : null
+    }));
+  }
+
+  // 为指定语言生成优化建议
+  getRecommendationsForLang(lang) {
+    const recs = [];
+    if (this.issues.length === 0) {
+      recs.push({
+        number: 1,
+        title: lang === 'zh' ? '保持良好习惯' : lang === 'en' ? 'Maintain good practices' : lang === 'ja' ? '良い習慣を保つ' : '좋은 습관 유지',
+        description: lang === 'zh' ? '定期使用 /contextdoctor 检查上下文健康状况' :
+                     lang === 'en' ? 'Regularly use /contextdoctor to check context health' :
+                     lang === 'ja' ? '定期的に /contextdoctor を使用してコンテキストの健康状態を確認する' :
+                     '정기적으로 /contextdoctor를 사용하여 컨텍스트 건강 상태를 확인하세요'
+      });
+    } else {
+      recs.push({
+        number: 1,
+        title: lang === 'zh' ? '优先处理严重问题' : lang === 'en' ? 'Prioritize critical issues' : lang === 'ja' ? '重大な問題を優先的に処理する' : '심각한 문제 우선 처리',
+        description: lang === 'zh' ? '首先解决标记为"严重"的污染问题' :
+                     lang === 'en' ? 'First resolve issues marked as "critical"' :
+                     lang === 'ja' ? '「重大」とマークされた問題を最初に解決する' :
+                     '"심각"으로 표시된 문제를 먼저 해결하세요'
+      });
+      recs.push({
+        number: 2,
+        title: lang === 'zh' ? '定期清理冗余配置' : lang === 'en' ? 'Regularly clean up redundant configs' : lang === 'ja' ? '冗長な設定を定期的に清理する' : '정기적으로 중복 구성 정리',
+        description: lang === 'zh' ? '移除不再使用的技能和插件' :
+                     lang === 'en' ? 'Remove unused skills and plugins' :
+                     lang === 'ja' ? '使用していないスキルとプラグインを削除する' :
+                     '사용하지 않는 스킬과 플러그인을 제거하세요'
+      });
+    }
+    return recs;
+  }
+
   // 生成报告
   generateReport(isRepair = false) {
     this.calculateScore();
@@ -186,6 +271,48 @@ class ContextDoctor {
     const totalIssues = this.issues.length;
 
     const maxCount = Math.max(criticalCount, warningCount, suggestionCount, 1);
+    const supportedLangs = ['zh', 'en', 'ja', 'ko'];
+
+    // 构建客户端多语言数据
+    const i18nForClient = {};
+    supportedLangs.forEach(lang => {
+      const t = i18n[lang];
+      i18nForClient[lang] = {
+        headerTitle: t.title,
+        headerSubtitle: `${t.subtitle}: ${new Date().toLocaleString()}`,
+        scoreLabel: t.scoreLabels[this.getScoreClass()],
+        summaryTitle: t.summaryTitle,
+        issuesLabel: t.issuesLabel,
+        criticalLabel: t.criticalLabel,
+        warningLabel: t.warningLabel,
+        suggestionLabel: t.suggestionLabel,
+        trendLabel: t.trendLabel,
+        distributionTitle: t.distributionTitle,
+        issuesTitle: t.issuesTitle,
+        emptyTitle: t.emptyTitle,
+        emptyText: t.emptyText,
+        repairTitle: t.repairTitle,
+        recommendationsTitle: t.recommendationsTitle,
+        footerText: t.footerText
+      };
+    });
+
+    const issuesByLang = {};
+    const fixesByLang = {};
+    const recommendationsByLang = {};
+    supportedLangs.forEach(lang => {
+      issuesByLang[lang] = this.getIssuesForLang(lang);
+      fixesByLang[lang] = this.getFixesForLang(lang);
+      recommendationsByLang[lang] = this.getRecommendationsForLang(lang);
+    });
+
+    const reportDataJSON = JSON.stringify({
+      defaultLang: this.lang,
+      i18n: i18nForClient,
+      issuesByLang,
+      fixesByLang,
+      recommendationsByLang
+    });
 
     const template = {
       lang: this.lang,
@@ -216,67 +343,22 @@ class ContextDoctor {
 
       issuesTitle: this.text.issuesTitle,
       hasIssues: totalIssues > 0,
-      issues: this.issues,
+      issues: this.getIssuesForLang(this.lang),
       emptyTitle: this.text.emptyTitle,
       emptyText: this.text.emptyText,
 
       isRepairReport: isRepair,
       repairTitle: this.text.repairTitle,
-      fixes: this.generateFixes(),
+      fixes: this.getFixesForLang(this.lang),
 
       recommendationsTitle: this.text.recommendationsTitle,
-      recommendations: this.generateRecommendations(),
+      recommendations: this.getRecommendationsForLang(this.lang),
 
-      footerText: this.text.footerText
+      footerText: this.text.footerText,
+      reportDataJSON
     };
 
     return template;
-  }
-
-  // 生成修复方案
-  generateFixes() {
-    return this.issues.map((issue, index) => ({
-      number: index + 1,
-      title: `${issue.title} - ${issue.severityLabel}`,
-      description: issue.description,
-      code: issue.severity === 'critical' ? `// 建议重置相关上下文段落\n// 位置: ${issue.location}` : null
-    }));
-  }
-
-  // 生成优化建议
-  generateRecommendations() {
-    const recs = [];
-    const t = this.lang;
-
-    if (this.issues.length === 0) {
-      recs.push({
-        number: 1,
-        title: t === 'zh' ? '保持良好习惯' : t === 'en' ? 'Maintain good practices' : t === 'ja' ? '良い習慣を保つ' : '좋은 습관 유지',
-        description: t === 'zh' ? '定期使用 /contextdoctor 检查上下文健康状况' :
-                     t === 'en' ? 'Regularly use /contextdoctor to check context health' :
-                     t === 'ja' ? '定期的に /contextdoctor を使用してコンテキストの健康状態を確認する' :
-                     '정기적으로 /contextdoctor를 사용하여 컨텍스트 건강 상태를 확인하세요'
-      });
-    } else {
-      recs.push({
-        number: 1,
-        title: t === 'zh' ? '优先处理严重问题' : t === 'en' ? 'Prioritize critical issues' : t === 'ja' ? '重大な問題を優先的に処理する' : '심각한 문제 우선 처리',
-        description: t === 'zh' ? '首先解决标记为"严重"的污染问题' :
-                     t === 'en' ? 'First resolve issues marked as "critical"' :
-                     t === 'ja' ? '「重大」とマークされた問題を最初に解決する' :
-                     '"심각"으로 표시된 문제를 먼저 해결하세요'
-      });
-      recs.push({
-        number: 2,
-        title: t === 'zh' ? '定期清理冗余配置' : t === 'en' ? 'Regularly clean up redundant configs' : t === 'ja' ? '冗長な設定を定期的に清理する' : '정기적으로 중복 구성 정리',
-        description: t === 'zh' ? '移除不再使用的技能和插件' :
-                     t === 'en' ? 'Remove unused skills and plugins' :
-                     t === 'ja' ? '使用していないスキルとプラグインを削除する' :
-                     '사용하지 않는 스킬과 플러그인을 제거하세요'
-      });
-    }
-
-    return recs;
   }
 }
 
@@ -285,11 +367,24 @@ async function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'check';
 
+  // 解析参数
+  const lang = args.find(a => a.startsWith('--lang='))?.split('=')[1] ||
+               args.find(a => a.startsWith('-l='))?.split('=')[1] || 'zh';
+  const customOutput = args.find(a => a.startsWith('--output='))?.split('=')[1] ||
+                       args.find(a => a.startsWith('-o='))?.split('=')[1];
+  const autoFix = args.includes('--auto-fix') || args.includes('-f');
+
+  // 确保报告目录存在
+  ensureReportsDir();
+
+  // 生成报告文件路径
+  const filename = customOutput || generateReportFilename(command, lang);
+  const outputPath = customOutput ? resolve(customOutput) : resolve(REPORTS_DIR, filename);
+
   const options = {
-    lang: args.find(a => a.startsWith('--lang='))?.split('=')[1] || 'zh',
-    output: args.find(a => a.startsWith('--output='))?.split('=')[1] ||
-            (command === 'repair' ? 'context-doctor-repair-report.html' : 'context-doctor-report.html'),
-    autoFix: args.includes('--auto-fix')
+    lang,
+    output: outputPath,
+    autoFix
   };
 
   const doctor = new ContextDoctor(options);
@@ -303,26 +398,57 @@ async function main() {
   const html = generateHTML(report);
 
   // 保存报告
-  writeFileSync(options.output, html);
+  writeFileSync(outputPath, html);
 
-  console.log(`✅ Report generated: ${options.output}`);
+  console.log(`✅ Report generated: ${outputPath}`);
+  console.log(`   Language: ${lang}`);
   console.log(`   Score: ${report.score}/100 (${report.scoreLabel})`);
   console.log(`   Issues: ${report.totalIssues}`);
+  console.log(`\n📊 View report: file://${outputPath}`);
 }
 
-// 生成 HTML（简化版，实际使用完整模板）
+// 模板引擎：支持 {{key}}、{{#if key}}...{{else}}...{{/if}}、{{#each array}}...{{/each}}
+function renderTemplate(template, data) {
+  // 处理 {{#each array}}...{{/each}}
+  template = template.replace(/\{\{#each (\w+)\}\}([\s\S]*?)\{\{\/each\}\}/g, (match, key, block) => {
+    const arr = data[key];
+    if (!Array.isArray(arr) || arr.length === 0) return '';
+    return arr.map(item => renderTemplate(block, item)).join('');
+  });
+
+  // 处理 {{#if key}}...{{else}}...{{/if}}
+  template = template.replace(/\{\{#if (\w+)\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, key, truePart, falsePart) => {
+    return data[key] ? renderTemplate(truePart, data) : renderTemplate(falsePart, data);
+  });
+
+  // 处理 {{#if key}}...{{/if}} (无 else)
+  template = template.replace(/\{\{#if (\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, key, block) => {
+    return data[key] ? renderTemplate(block, data) : '';
+  });
+
+  // 处理 {{key}} 变量替换（reportDataJSON 直接插入，其余转义）
+  template = template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+    if (data[key] === undefined) return match;
+    if (key === 'reportDataJSON') return data[key]; // raw JSON, no escaping
+    const val = data[key];
+    if (typeof val === 'object') return '';
+    return String(val)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  });
+
+  return template;
+}
+
+// 生成 HTML
 function generateHTML(data) {
   const templatePath = resolve(__dirname, '../assets/report-template.html');
 
   if (existsSync(templatePath)) {
-    let template = readFileSync(templatePath, 'utf-8');
-
-    // 简单的模板替换
-    template = template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
-      return data[key] !== undefined ? data[key] : match;
-    });
-
-    return template;
+    const template = readFileSync(templatePath, 'utf-8');
+    return renderTemplate(template, data);
   }
 
   // 回退到简单 HTML

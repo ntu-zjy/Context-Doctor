@@ -2,10 +2,9 @@
 name: contextdoctor
 description: 检查当前对话上下文是否存在污染，生成可视化HTML报告。当用户想要检查上下文健康度、发现指令冲突或优化对话质量时自动触发。
 when_to_use: 用户提及"上下文"、"污染"、"冲突"、"检查"、"健康度"等关键词时；对话出现矛盾或异常行为时；长时间对话后需要优化时。
-argument-hint: '[输出文件路径]'
+argument-hint: '[--lang=zh|en|ja|ko] [--output=自定义路径]'
 disable-model-invocation: false
 allowed-tools: Read Write Bash Glob Grep
-model: sonnet
 effort: high
 ---
 

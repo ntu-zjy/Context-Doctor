@@ -35,7 +35,6 @@ cp commands/repair.md ~/.config/opencode/commands/
       "template": "请作为 Context Doctor 分析当前对话上下文...",
       "description": "检查当前上下文的污染，输出HTML可视化报告",
       "agent": "explore",
-      "model": "anthropic/claude-3-5-sonnet-20241022",
       "subtask": true
     },
     "repair": {

@@ -9,6 +9,7 @@ import { existsSync, mkdirSync, writeFileSync, copyFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { homedir } from 'os';
+import { execSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, '..');
@@ -27,41 +28,42 @@ function log(message, color = 'reset') {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
+function commandExists(command) {
+  try {
+    execSync(`which ${command}`, { stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function detectFrameworks() {
   const frameworks = [];
 
   // Check Claude Code
-  try {
-    const { execSync } = await import('child_process');
-    execSync('which claude', { stdio: 'ignore' });
+  if (commandExists('claude')) {
     frameworks.push('claude');
-  } catch {}
+  }
 
   // Check Codex
-  try {
-    const { execSync } = await import('child_process');
-    execSync('which codex', { stdio: 'ignore' });
+  if (commandExists('codex')) {
     frameworks.push('codex');
-  } catch {}
+  }
 
   // Check Cursor (typically has app directory)
   if (existsSync('/Applications/Cursor.app') ||
-      existsSync(`${homedir()}/Applications/Cursor.app`)) {
+      existsSync(`${homedir()}/Applications/Cursor.app`) ||
+      existsSync(`${homedir()}/.cursor`)) {
     frameworks.push('cursor');
   }
 
   // Check OpenCode/Crush
-  try {
-    const { execSync } = await import('child_process');
-    execSync('which opencode', { stdio: 'ignore' });
+  if (commandExists('opencode')) {
     frameworks.push('opencode');
-  } catch {}
-
-  try {
-    const { execSync } = await import('child_process');
-    execSync('which crush', { stdio: 'ignore' });
+  }
+  if (commandExists('crush')) {
     frameworks.push('crush');
-  } catch {}
+  }
 
   return frameworks;
 }
@@ -188,7 +190,6 @@ async function installForOpenCode() {
   const repairMd = `---
 description: 检查上下文污染并提供修复方案
 agent: explore
-model: anthropic/claude-3-5-sonnet-20241022
 subtask: true
 ---
 

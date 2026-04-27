@@ -33,7 +33,8 @@
 
 - 🔍 **智能检测** - 自动识别 3 大类污染：Skill 冲突、指令矛盾、错误累积
 - 📊 **可视化报告** - 美观的 HTML 报告，采用 Starbucks 设计系统
-- 🌍 **多语言支持** - 中文、英文、日文、韩文
+- 🌍 **多语言支持** - 中文、英文、日文、韩文，报告内可一键切换
+- 📅 **时间戳管理** - 报告自动保存到 `~/.contextdoctor/reports/`，按时间排序
 - 🔧 **一键修复** - 不仅检测问题，还提供具体的修复方案
 - 🚀 **极简安装** - 一条命令安装到所有支持的 Agent 框架
 - 🎨 **框架灵活** - 支持 Claude Code、Codex CLI、Cursor、OpenCode/Crush
@@ -42,44 +43,75 @@
 
 ## 📦 安装
 
-### 快速安装（推荐）
+### 方式一：自动安装脚本
 
 ```bash
-curl -fsSL https://contextdoctor.dev/install.sh | bash
+# 下载项目后执行安装脚本
+node scripts/install.mjs
 ```
 
-### 手动安装
+### 方式二：手动安装
 
 #### Claude Code
 
 ```bash
+# 创建技能目录
 mkdir -p ~/.claude/skills/contextdoctor
-curl -o ~/.claude/skills/contextdoctor/SKILL.md \
-  https://raw.githubusercontent.com/contextdoctor/contextdoctor/main/plugins/contextdoctor/skills/contextdoctor/SKILL.md
+mkdir -p ~/.claude/skills/repair
+
+# 复制技能文件（假设你在项目目录）
+cp plugins/contextdoctor/skills/contextdoctor/SKILL.md ~/.claude/skills/contextdoctor/
+cp plugins/contextdoctor/skills/repair/SKILL.md ~/.claude/skills/repair/
 ```
 
 #### Codex CLI
 
 ```bash
-mkdir -p ~/.codex
-curl -o ~/.codex/codex.md \
-  https://raw.githubusercontent.com/contextdoctor/contextdoctor/main/plugins/contextdoctor/.opencode/INSTALL.md
+# 创建全局 skill 目录
+mkdir -p ~/.agents/skills/contextdoctor
+mkdir -p ~/.agents/skills/repair
+
+# 复制 skill 文件
+cp plugins/contextdoctor/skills/contextdoctor/SKILL.md ~/.agents/skills/contextdoctor/
+cp plugins/contextdoctor/skills/repair/SKILL.md ~/.agents/skills/repair/
 ```
 
 #### Cursor
 
 ```bash
+# 创建命令目录
 mkdir -p ~/.cursor/commands
-curl -o ~/.cursor/commands/contextdoctor.json \
-  https://raw.githubusercontent.com/contextdoctor/contextdoctor/main/plugins/contextdoctor/.cursor-plugin/contextdoctor.json
+
+# 复制命令配置
+cp plugins/contextdoctor/.cursor-plugin/plugin.json ~/.cursor/commands/contextdoctor.json
+
+# 创建 repair 命令
+cat > ~/.cursor/commands/repair.json << 'EOF'
+{
+  "name": "repair",
+  "description": "检查上下文污染并提供修复方案",
+  "prompt": "执行上下文污染检测并提供修复建议"
+}
+EOF
 ```
 
 #### OpenCode / Crush
 
 ```bash
+# 创建命令目录
 mkdir -p ~/.config/opencode/commands
-curl -o ~/.config/opencode/commands/contextdoctor.md \
-  https://raw.githubusercontent.com/contextdoctor/contextdoctor/main/plugins/contextdoctor/commands/contextdoctor.md
+
+# 复制命令文件
+cp plugins/contextdoctor/commands/contextdoctor.md ~/.config/opencode/commands/
+
+# 创建 repair 命令
+cat > ~/.config/opencode/commands/repair.md << 'EOF'
+---
+description: 检查上下文污染并提供修复方案
+---
+
+执行上下文污染检测并提供修复建议
+EOF
 ```
 
 ---
@@ -98,6 +130,20 @@ curl -o ~/.config/opencode/commands/contextdoctor.md \
 - 具体问题列表
 - 修复优先级建议
 
+#### 多语言支持
+
+```bash
+/contextdoctor --lang=en    # 英文报告
+/contextdoctor --lang=ja    # 日文报告
+/contextdoctor --lang=ko    # 韩文报告
+```
+
+#### 自定义输出路径
+
+```bash
+/contextdoctor --output=./my-report.html
+```
+
 ### 获取修复方案
 
 ```bash
@@ -109,16 +155,48 @@ curl -o ~/.config/opencode/commands/contextdoctor.md \
 - 可直接复制使用的修复文本
 - 推荐的上下文清理策略
 
+### 报告位置
+
+报告默认保存到 `~/.contextdoctor/reports/`，文件名格式：
+```
+context-doctor-report-2025-01-15T10-30-00-zh.html
+context-doctor-repair-2025-01-15T10-35-00-en.html
+```
+
+历史报告按时间戳排序，方便追踪上下文健康趋势。
+
 ---
 
 ## 📊 报告预览
 
 <p align="center">
-  <img src="docs/assets/report-preview.svg" width="600" alt="Report Preview">
+  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="健康评分总览">
+  <br>
+  <em>综合健康评分总览 — 一眼掌握上下文状态</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="多语言切换">
+  <br>
+  <em>多语言界面 — 中文/英文/日文/韩文一键切换</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-33.png" width="800" alt="问题详情列表">
+  <br>
+  <em>问题详情列表 — 红色（严重）、金色（警告）、绿色（建议）分级展示</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="修复方案">
+  <br>
+  <em>/repair 命令 — 提供可直接使用的具体修复方案</em>
 </p>
 
 报告特点：
 - 🎨 **Starbucks 设计系统** - 温暖的色调，舒适的阅读体验
+- 🌍 **多语言界面** - 中文/英文/日文/韩文一键切换
+- 📅 **时间戳命名** - 自动保存到 `~/.contextdoctor/reports/`，方便历史追踪
 - 📱 **响应式布局** - 支持桌面和移动设备
 - 🌈 **严重等级颜色** - 红色（严重）、金色（警告）、绿色（建议）
 - 📈 **动态图表** - 直观展示问题分布
@@ -130,7 +208,7 @@ curl -o ~/.config/opencode/commands/contextdoctor.md \
 | 框架 | 安装方式 | 指令 |
 |------|----------|------|
 | Claude Code | Skill 系统 | `/contextdoctor`, `/repair` |
-| OpenAI Codex | `codex.md` + `agents/` | `/contextdoctor`, `/repair` |
+| OpenAI Codex | Skills 系统 (`.agents/skills/`) | `$contextdoctor`, `$repair` |
 | Cursor | Custom Commands | `/contextdoctor`, `/repair` |
 | OpenCode | `commands/` 目录 | `/contextdoctor`, `/repair` |
 | Crush | JSON 配置 | `contextdoctor`, `repair` |

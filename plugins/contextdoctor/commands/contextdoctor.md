@@ -1,13 +1,18 @@
 ---
 description: 检查当前上下文的污染，输出HTML可视化报告
 agent: explore
-model: anthropic/claude-3-5-sonnet-20241022
 subtask: true
 ---
 
 # Context Doctor 检测指令
 
-请作为 Context Doctor 分析当前对话上下文，检测以下污染类型：
+请作为 Context Doctor 分析当前对话上下文，检测以下污染类型。
+
+## 参数
+
+- `$ARGUMENTS` - 可选参数
+  - `--lang=zh|en|ja|ko` - 报告语言（默认：zh）
+  - `--output=路径` - 自定义输出路径
 
 ## 检测维度
 
@@ -39,4 +44,6 @@ subtask: true
 
 ## 报告位置
 
-$ARGUMENTS 或默认 `context-doctor-report.html`
+报告默认保存到 `~/.contextdoctor/reports/`，文件名包含时间戳：
+- 格式：`context-doctor-report-YYYY-MM-DDTHH-mm-ss-{lang}.html`
+- 也可通过 `--output` 参数指定自定义路径

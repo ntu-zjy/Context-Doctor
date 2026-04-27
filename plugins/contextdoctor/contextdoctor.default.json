@@ -10,7 +10,9 @@
       "format": "html",
       "defaultLanguage": "zh",
       "autoOpen": true,
-      "template": "starbucks"
+      "template": "starbucks",
+      "saveLocation": "~/.contextdoctor/reports",
+      "namingPattern": "context-doctor-{type}-{timestamp}-{lang}.html"
     },
 
     "detection": {
@@ -59,16 +61,16 @@
       "description": "检查当前上下文的污染，输出HTML可视化报告",
       "arguments": [
         {
-          "name": "output",
-          "description": "报告输出路径",
-          "optional": true,
-          "default": "context-doctor-report.html"
-        },
-        {
-          "name": "lang",
-          "description": "报告语言",
+          "name": "--lang",
+          "description": "报告语言 (zh|en|ja|ko)",
           "optional": true,
           "default": "zh"
+        },
+        {
+          "name": "--output",
+          "description": "自定义报告输出路径",
+          "optional": true,
+          "default": "~/.contextdoctor/reports/context-doctor-report-{timestamp}-{lang}.html"
         }
       ]
     },
@@ -76,13 +78,19 @@
       "description": "检查上下文污染并提供修复方案",
       "arguments": [
         {
-          "name": "output",
-          "description": "报告输出路径",
+          "name": "--lang",
+          "description": "报告语言 (zh|en|ja|ko)",
           "optional": true,
-          "default": "context-doctor-repair-report.html"
+          "default": "zh"
         },
         {
-          "name": "auto-fix",
+          "name": "--output",
+          "description": "自定义报告输出路径",
+          "optional": true,
+          "default": "~/.contextdoctor/reports/context-doctor-repair-{timestamp}-{lang}.html"
+        },
+        {
+          "name": "--auto-fix",
           "description": "自动应用低风险修复",
           "optional": true,
           "default": false
