@@ -112,6 +112,58 @@ node plugins/contextdoctor/scripts/contextdoctor.mjs run \
 contextdoctor run --framework=auto --scope=recent
 ```
 
+## フレームワーク別インストール
+
+まず repository root で CLI を `PATH` から使えるようにします:
+
+```bash
+npm link
+```
+
+Codex local plugin:
+
+```bash
+# .agents/plugins/marketplace.json が ./plugins/contextdoctor を指す状態にします
+contextdoctor run --framework=codex
+```
+
+Claude Code slash command:
+
+```bash
+mkdir -p .claude/commands
+ln -sf "$PWD/plugins/contextdoctor/commands/contextdoctor.md" \
+  .claude/commands/contextdoctor.md
+contextdoctor run --framework=claude
+```
+
+OpenCode plugin:
+
+```json
+{
+  "plugin": ["contextdoctor@git+file:///absolute/path/to/Context-Doctor/plugins/contextdoctor"]
+}
+```
+
+```bash
+contextdoctor run --framework=opencode
+```
+
+Cursor または transcript-first agent:
+
+```bash
+contextdoctor run \
+  --framework=cursor \
+  --transcript /path/to/session.jsonl
+```
+
+自作または multi-agent system では、agent ごとに transcript を分けて明示的に診断します:
+
+```bash
+contextdoctor run --framework=auto --transcript ./logs/planner.jsonl
+contextdoctor run --framework=auto --transcript ./logs/coder.jsonl
+contextdoctor run --framework=auto --transcript ./logs/reviewer.jsonl
+```
+
 ## Slash Command
 
 ```text

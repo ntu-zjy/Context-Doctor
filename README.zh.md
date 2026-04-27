@@ -111,6 +111,58 @@ node plugins/contextdoctor/scripts/contextdoctor.mjs run \
 contextdoctor run --framework=auto --scope=recent
 ```
 
+## 按框架安装
+
+先在仓库根目录把 CLI 放到 `PATH`：
+
+```bash
+npm link
+```
+
+Codex 本地插件：
+
+```bash
+# 保持 .agents/plugins/marketplace.json 指向 ./plugins/contextdoctor
+contextdoctor run --framework=codex
+```
+
+Claude Code slash command：
+
+```bash
+mkdir -p .claude/commands
+ln -sf "$PWD/plugins/contextdoctor/commands/contextdoctor.md" \
+  .claude/commands/contextdoctor.md
+contextdoctor run --framework=claude
+```
+
+OpenCode 插件：
+
+```json
+{
+  "plugin": ["contextdoctor@git+file:///absolute/path/to/Context-Doctor/plugins/contextdoctor"]
+}
+```
+
+```bash
+contextdoctor run --framework=opencode
+```
+
+Cursor 或 transcript-first Agent：
+
+```bash
+contextdoctor run \
+  --framework=cursor \
+  --transcript /path/to/session.jsonl
+```
+
+自研或多 Agent 系统建议每个 Agent 单独写一份 transcript，再分别诊断：
+
+```bash
+contextdoctor run --framework=auto --transcript ./logs/planner.jsonl
+contextdoctor run --framework=auto --transcript ./logs/coder.jsonl
+contextdoctor run --framework=auto --transcript ./logs/reviewer.jsonl
+```
+
 ## Slash Command
 
 ```text
