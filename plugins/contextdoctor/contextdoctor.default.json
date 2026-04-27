@@ -1,0 +1,93 @@
+{
+  "name": "contextdoctor",
+  "version": "1.0.0",
+  "description": "上下文污染检测与修复工具",
+  "author": "Context Doctor Team",
+  "license": "MIT",
+
+  "config": {
+    "report": {
+      "format": "html",
+      "defaultLanguage": "zh",
+      "autoOpen": true,
+      "template": "starbucks"
+    },
+
+    "detection": {
+      "skillConflict": {
+        "enabled": true,
+        "severity": "warning"
+      },
+      "instructionConflict": {
+        "enabled": true,
+        "severity": "critical"
+      },
+      "errorAccumulation": {
+        "enabled": true,
+        "severity": "warning"
+      }
+    },
+
+    "scoring": {
+      "weights": {
+        "critical": 3.0,
+        "warning": 1.5,
+        "suggestion": 0.5
+      },
+      "thresholds": {
+        "excellent": 90,
+        "good": 70,
+        "fair": 50,
+        "poor": 30
+      }
+    },
+
+    "repair": {
+      "autoFixLowRisk": false,
+      "suggestBacktrack": true,
+      "maxSuggestions": 10
+    },
+
+    "i18n": {
+      "supportedLanguages": ["zh", "en", "ja", "ko"],
+      "defaultLanguage": "zh"
+    }
+  },
+
+  "commands": {
+    "contextdoctor": {
+      "description": "检查当前上下文的污染，输出HTML可视化报告",
+      "arguments": [
+        {
+          "name": "output",
+          "description": "报告输出路径",
+          "optional": true,
+          "default": "context-doctor-report.html"
+        },
+        {
+          "name": "lang",
+          "description": "报告语言",
+          "optional": true,
+          "default": "zh"
+        }
+      ]
+    },
+    "repair": {
+      "description": "检查上下文污染并提供修复方案",
+      "arguments": [
+        {
+          "name": "output",
+          "description": "报告输出路径",
+          "optional": true,
+          "default": "context-doctor-repair-report.html"
+        },
+        {
+          "name": "auto-fix",
+          "description": "自动应用低风险修复",
+          "optional": true,
+          "default": false
+        }
+      ]
+    }
+  }
+}

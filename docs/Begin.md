@@ -3,11 +3,11 @@
 2. 问题二: skill太多，plugin太多，使用时会相互冲突，上下文污染，还导致加载过慢的问题，用户也很难肉眼修复
 
 # 适配架构
-opencode
-codex
-claude code
-cursor
-openclaw
+1. opencode
+2. codex
+3. claude code
+4. cursor
+5. openclaw
 
 # 使用方式
 用户直接用指令驱动

@@ -1,0 +1,19 @@
+{
+  "id": "contextdoctor",
+  "name": "Context Doctor",
+  "description": "上下文污染检测与修复工具",
+  "version": "1.0.0",
+  "codexVersion": ">=0.1.0",
+  "commands": {
+    "contextdoctor": {
+      "description": "检查当前上下文的污染，输出HTML可视化报告",
+      "prompt": "请作为 Context Doctor 分析当前对话和项目上下文，检测以下污染类型：\n\n1. **工具配置冲突**（agents 之间）\n2. **用户指令前后矛盾**\n3. **累积性错误传播**\n\n生成 HTML 报告使用 Starbucks 设计风格。",
+      "output": "html"
+    },
+    "repair": {
+      "description": "检查上下文污染并提供修复方案",
+      "prompt": "执行完整的上下文污染检测，并提供自动修复方案。",
+      "output": "html"
+    }
+  }
+}

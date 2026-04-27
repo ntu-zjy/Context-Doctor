@@ -1,0 +1,16 @@
+{
+  "id": "contextdoctor",
+  "name": "Context Doctor",
+  "description": "上下文污染检测与修复工具 - 检测 Skill/Plugin 冲突、指令矛盾和错误累积",
+  "version": "1.0.0",
+  "author": "Context Doctor Team",
+  "license": "MIT",
+  "minClaudeVersion": "1.0.0",
+  "skills": ["contextdoctor", "repair"],
+  "commands": ["contextdoctor", "repair"],
+  "config": {
+    "reportFormat": "html",
+    "defaultLanguage": "zh",
+    "autoOpen": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "contextdoctor",
+  "name": "Context Doctor",
+  "description": "上下文污染检测与修复工具",
+  "version": "1.0.0",
+  "cursorVersion": ">=0.40.0",
+  "commands": [
+    {
+      "name": "contextdoctor",
+      "description": "检查当前上下文的污染，输出HTML可视化报告",
+      "prompt": "请作为 Context Doctor 分析当前对话上下文，检测以下污染类型：\n\n1. **工具冲突**：检查 .cursor/rules/ 中的规则冲突\n2. **指令矛盾**：识别用户历史提示中的前后不一致\n3. **错误累积**：追踪早期错误对后续的影响\n\n输出要求：\n- 生成 HTML 可视化报告\n- 采用 Starbucks 设计风格（暖色调）\n- 包含综合评分（0-100）\n- 按严重/警告/建议分级\n\n报告保存到：context-doctor-report.html",
+      "key": "ctrl+shift+c"
+    },
+    {
+      "name": "repair",
+      "description": "检查上下文污染并提供修复方案",
+      "prompt": "执行上下文污染检测并提供修复建议：\n\n1. 针对每个问题的具体修复建议\n2. 推荐的上下文清理步骤\n3. 优化后的对话重启建议\n4. 修复脚本（如适用）\n\n输出修复报告和可执行的解决方案。"
+    }
+  ],
+  "rules": [
+    {
+      "name": "Context Doctor Rules",
+      "path": ".cursor/rules/context-doctor.md"
+    }
+  ]
+}

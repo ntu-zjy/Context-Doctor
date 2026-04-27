@@ -1,0 +1,51 @@
+{
+  "name": "context-doctor",
+  "version": "1.0.0",
+  "description": "上下文污染检测与修复工具 - Context Pollution Detection & Repair Tool",
+  "main": "plugins/contextdoctor/scripts/contextdoctor.mjs",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "lint": "eslint plugins/",
+    "build": "npm run build:claude && npm run build:cursor && npm run build:opencode",
+    "build:claude": "mkdir -p dist/claude && cp -r plugins/contextdoctor/skills/* dist/claude/",
+    "build:cursor": "mkdir -p dist/cursor && cp -r plugins/contextdoctor/.cursor-plugin/* dist/cursor/",
+    "build:opencode": "mkdir -p dist/opencode && cp -r plugins/contextdoctor/.opencode/* dist/opencode/",
+    "install:global": "node scripts/install.mjs"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "context",
+    "pollution",
+    "claude",
+    "codex",
+    "cursor",
+    "debug",
+    "lint"
+  ],
+  "author": "Context Doctor Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/contextdoctor/contextdoctor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/contextdoctor/contextdoctor/issues"
+  },
+  "homepage": "https://contextdoctor.dev",
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "plugins/",
+    "docs/",
+    "LICENSE",
+    "README.md"
+  ]
+}
