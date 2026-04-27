@@ -111,6 +111,58 @@ After linking or installing the package:
 contextdoctor run --framework=auto --scope=recent
 ```
 
+## Install By Framework
+
+Start by making the CLI available from the repository root:
+
+```bash
+npm link
+```
+
+Codex local plugin:
+
+```bash
+# Keep .agents/plugins/marketplace.json pointing to ./plugins/contextdoctor
+contextdoctor run --framework=codex
+```
+
+Claude Code slash command:
+
+```bash
+mkdir -p .claude/commands
+ln -sf "$PWD/plugins/contextdoctor/commands/contextdoctor.md" \
+  .claude/commands/contextdoctor.md
+contextdoctor run --framework=claude
+```
+
+OpenCode plugin:
+
+```json
+{
+  "plugin": ["contextdoctor@git+file:///absolute/path/to/Context-Doctor/plugins/contextdoctor"]
+}
+```
+
+```bash
+contextdoctor run --framework=opencode
+```
+
+Cursor or transcript-first agents:
+
+```bash
+contextdoctor run \
+  --framework=cursor \
+  --transcript /path/to/session.jsonl
+```
+
+Custom or multi-agent systems should write one transcript per agent and diagnose each one explicitly:
+
+```bash
+contextdoctor run --framework=auto --transcript ./logs/planner.jsonl
+contextdoctor run --framework=auto --transcript ./logs/coder.jsonl
+contextdoctor run --framework=auto --transcript ./logs/reviewer.jsonl
+```
+
 ## Slash Command
 
 ```text
