@@ -66,38 +66,35 @@ effort: high
 
 ## 报告输出
 
-报告文件路径：`$ARGUMENTS` 或默认 `context-doctor-report.html`
+### 生成方式
 
-### 设计风格要求
+**必须**通过调用 `contextdoctor.mjs` 脚本生成报告，禁止自行拼接 HTML：
 
-参考 DESIGN.md 中的 Starbucks 设计系统：
+```bash
+# 1. 找到脚本路径（安装时已写入 ~/.contextdoctor/scripts/）
+SCRIPT="$HOME/.contextdoctor/scripts/contextdoctor.mjs"
 
-**颜色系统**：
-- 严重问题：Red (`#c82014`)
-- 警告问题：Gold (`#cba258`)
-- 建议优化：Green Accent (`#00754A`)
-- 背景画布：Neutral Warm (`#f2f0eb`)
-- 深色带：House Green (`#1E3932`)
+# 2. 将分析结果以 JSON 格式写入临时文件，再调用脚本渲染
+node "$SCRIPT" check --lang=<lang> [--output=<自定义路径>]
+```
 
-**字体**：
-- 主字体：Inter, "Helvetica Neue", Helvetica, Arial, sans-serif
-- 标题字重：600
-- 正文字重：400
-- 字间距：-0.01em
+脚本会自动读取 `assets/report-template.html` 模板并渲染，确保所有报告视觉一致。
 
-**组件**：
-- 卡片：12px 圆角，柔和阴影
-- 按钮：50px 全圆角
-- 评分圆环：动态 SVG
+### 路径规范
 
-## 示例输出结构
+- 默认保存目录：`~/.contextdoctor/reports/`
+- 命名格式：`context-doctor-report-{YYYY-MM-DDTHH-mm-ss}-{lang}.html`
+- 自定义路径：通过 `--output` 参数指定，覆盖默认路径
+- 框架区分：文件名中 `report` 固定标识 contextdoctor 检测报告（repair 使用 `repair`）
 
-报告必须包含以下部分：
-1. 头部：标题和综合评分
-2. 概览：污染类型分布
-3. 详情：具体问题列表（带引用）
+### 示例输出结构
+
+报告由模板统一渲染，包含以下部分：
+1. 头部：标题和综合评分（SVG 圆环）
+2. 概览：污染类型分布（Critical / Warning / Suggestion）
+3. 详情：具体问题列表（带位置引用）
 4. 建议：修复优先级
-5. 导出：JSON/CSV 数据选项
+5. 多语言切换（客户端 JS，无需重新生成）
 
 ## 注意事项
 

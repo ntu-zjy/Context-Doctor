@@ -128,27 +128,33 @@ cp plugins/contextdoctor/commands/contextdoctor.md ~/.config/opencode/commands/
 ## 📊 レポートプレビュー
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="健康スコア概要">
+  <img src="img/screenshot_cc_conversation.png" width="800" alt="CLI 使用例">
   <br>
-  <em>総合健康スコア概要 — コンテキストの状態を一目で把握</em>
+  <em>Claude Code で <code>/contextdoctor</code> を実行するだけ — ワンクリックで HTML ビジュアルレポートを生成</em>
 </p>
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="多言語切り替え">
+  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="健康スコア概要">
   <br>
-  <em>多言語インターフェース — 中国語/英語/日本語/韓国語をワンクリックで切り替え</em>
+  <em>総合健康スコア概要 — コンテキストの状態を一目で把握、リングの色が重大度に応じて変化</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="スコア内訳と問題分布">
+  <br>
+  <em>スコア減点内訳 + 問題分布チャート — 問題がある場合のみ表示</em>
 </p>
 
 <p align="center">
   <img src="img/Snipaste_2026-04-27_16-50-33.png" width="800" alt="問題詳細リスト">
   <br>
-  <em>問題詳細リスト — 赤（重大）、金（警告）、緑（提案）の段階的表示</em>
+  <em>問題詳細リスト — 赤（重大）、金（警告）、緑（提案）の段階的表示、CSS インジケーターで絵文字を置き換え</em>
 </p>
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="修復案">
+  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="多言語切り替え">
   <br>
-  <em>/repair コマンド — すぐに使える具体的な修復案を提供</em>
+  <em>多言語インターフェース — 中国語/英語/日本語/韓国語をワンクリックで切り替え、設定は自動で保持</em>
 </p>
 
 レポートの特徴：

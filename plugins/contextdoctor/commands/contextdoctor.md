@@ -42,8 +42,19 @@ subtask: true
 - 包含综合评分（0-100）
 - 按严重/警告/建议三级分类
 
-## 报告位置
+## 报告生成
 
-报告默认保存到 `~/.contextdoctor/reports/`，文件名包含时间戳：
-- 格式：`context-doctor-report-YYYY-MM-DDTHH-mm-ss-{lang}.html`
-- 也可通过 `--output` 参数指定自定义路径
+**必须**通过调用 `contextdoctor.mjs` 脚本生成报告，禁止自行拼接 HTML：
+
+```bash
+node "$HOME/.contextdoctor/scripts/contextdoctor.mjs" check --lang=<lang> [--output=<路径>]
+```
+
+脚本统一使用 `assets/report-template.html` 模板渲染，保证所有报告视觉一致。
+
+## 路径规范
+
+- 默认目录：`~/.contextdoctor/reports/`
+- 命名格式：`context-doctor-report-{YYYY-MM-DDTHH-mm-ss}-{lang}.html`
+- 框架区分：`report`（检测）/ `repair`（修复），其余部分格式相同
+- 自定义路径：通过 `--output` 参数指定

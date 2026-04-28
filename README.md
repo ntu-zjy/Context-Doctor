@@ -1,4 +1,4 @@
-# 🩺 Context Doctor
+# 🩺 Context Doctor 守护您的Agent上下文健康
 
 <p align="center">
   <img src="docs/assets/contextdoctor-logo.svg" width="128" height="128" alt="Context Doctor Logo">
@@ -170,27 +170,33 @@ context-doctor-repair-2025-01-15T10-35-00-en.html
 ## 📊 报告预览
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="健康评分总览">
+  <img src="img/screenshot_cc_conversation.png" width="800" alt="CLI 使用示例">
   <br>
-  <em>综合健康评分总览 — 一眼掌握上下文状态</em>
+  <em>在 Claude Code 中直接运行 <code>/contextdoctor</code>，一键生成 HTML 可视化报告</em>
 </p>
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="多语言切换">
+  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="健康评分总览">
   <br>
-  <em>多语言界面 — 中文/英文/日文/韩文一键切换</em>
+  <em>综合健康评分总览 — 一眼掌握上下文状态，评分环颜色随严重程度变化</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="评分明细与问题分布">
+  <br>
+  <em>评分扣分明细 + 问题分布图表 — 清晰展示评分来源，仅在存在问题时显示</em>
 </p>
 
 <p align="center">
   <img src="img/Snipaste_2026-04-27_16-50-33.png" width="800" alt="问题详情列表">
   <br>
-  <em>问题详情列表 — 红色（严重）、金色（警告）、绿色（建议）分级展示</em>
+  <em>问题详情列表 — 红色（严重）、金色（警告）、绿色（建议）分级展示，CSS 指示器替代 emoji</em>
 </p>
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="修复方案">
+  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="多语言切换">
   <br>
-  <em>/repair 命令 — 提供可直接使用的具体修复方案</em>
+  <em>多语言界面 — 中文/英文/日文/韩文一键切换，偏好自动持久化</em>
 </p>
 
 报告特点：

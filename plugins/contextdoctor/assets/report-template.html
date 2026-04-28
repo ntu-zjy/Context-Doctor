@@ -5,726 +5,884 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{title}} - Context Doctor</title>
   <style>
-    /* CSS Variables - Starbucks Design System */
+    /* ── Design Tokens ──────────────────────────────────────────────────── */
     :root {
-      /* Primary Greens */
-      --starbucks-green: #006241;
-      --green-accent: #00754A;
-      --house-green: #1E3932;
-      --green-uplift: #2b5148;
-      --green-light: #d4e9e2;
+      /* Greens */
+      --green-brand:   #006241;
+      --green-action:  #00754A;
+      --green-deep:    #1E3932;
+      --green-uplift:  #2b5148;
+      --green-light:   #d4e9e2;
+      --green-surface: #edf7f2;
 
-      /* Secondary */
-      --gold: #cba258;
-      --gold-light: #dfc49d;
-      --gold-lightest: #faf6ee;
+      /* Gold */
+      --gold:          #cba258;
+      --gold-light:    #dfc49d;
+      --gold-surface:  #faf6ee;
 
       /* Surfaces */
-      --white: #ffffff;
-      --neutral-cool: #f9f9f9;
-      --neutral-warm: #f2f0eb;
-      --ceramic: #edebe9;
+      --white:         #ffffff;
+      --bg:            #f2f0eb;
+      --surface-cool:  #f9f9f9;
+      --border:        #edebe9;
 
       /* Text */
-      --text-black: rgba(0, 0, 0, 0.87);
-      --text-black-soft: rgba(0, 0, 0, 0.58);
-      --text-white: rgba(255, 255, 255, 1);
-      --text-white-soft: rgba(255, 255, 255, 0.70);
-      --rewards-green: #33433d;
+      --text:          rgba(0,0,0,0.87);
+      --text-soft:     rgba(0,0,0,0.52);
+      --text-xsoft:    rgba(0,0,0,0.38);
+      --text-on-dark:  rgba(255,255,255,1);
+      --text-on-dark-soft: rgba(255,255,255,0.65);
 
-      /* Semantic */
-      --red: #c82014;
-      --yellow: #fbbc05;
+      /* Severity */
+      --red:           #c82014;
+      --red-surface:   #fff1f0;
+      --yellow:        #d97706;
+      --yellow-surface:#fffbeb;
+      --sug-surface:   #f0fdf4;
 
       /* Typography */
-      --font-primary: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
-      --font-serif: "Iowan Old Style", Georgia, serif;
+      --font: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", Monaco, monospace;
 
-      /* Spacing */
-      --space-1: 0.4rem;
-      --space-2: 0.8rem;
-      --space-3: 1.6rem;
-      --space-4: 2.4rem;
-      --space-5: 3.2rem;
-      --space-6: 4rem;
-      --space-7: 4.8rem;
+      /* Spacing (1rem = 10px) */
+      --s1: 0.4rem;
+      --s2: 0.8rem;
+      --s3: 1.6rem;
+      --s4: 2.4rem;
+      --s5: 3.2rem;
+      --s6: 4.0rem;
+
+      /* Radius */
+      --r-sm: 6px;
+      --r-md: 10px;
+      --r-lg: 14px;
+      --r-pill: 999px;
 
       /* Shadows */
-      --shadow-card: 0 0 0.5px rgba(0,0,0,0.14), 0 1px 1px rgba(0,0,0,0.24);
-      --shadow-nav: 0 1px 3px rgba(0,0,0,0.1), 0 2px 2px rgba(0,0,0,0.06), 0 0 2px rgba(0,0,0,0.07);
+      --shadow-card: 0 0 0 1px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-card-hover: 0 0 0 1px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.10);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      font-size: 62.5%;
-    }
-
+    /* ── Reset ──────────────────────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 62.5%; }
     body {
-      font-family: var(--font-primary);
-      font-size: 1.6rem;
-      line-height: 1.5;
+      font-family: var(--font);
+      font-size: 1.5rem;
+      line-height: 1.6;
       letter-spacing: -0.01em;
-      color: var(--text-black);
-      background: var(--neutral-warm);
+      color: var(--text);
+      background: var(--bg);
       min-height: 100vh;
     }
 
-    /* Header */
+    /* ── Header ─────────────────────────────────────────────────────────── */
     .header {
-      background: var(--house-green);
-      color: var(--text-white);
-      padding: var(--space-6) var(--space-4);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 40%;
-      height: 100%;
-      background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.03) 100%);
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-    }
-
-    .header-title {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-
-    .logo {
-      width: 48px;
-      height: 48px;
-      background: var(--green-accent);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.4rem;
-    }
-
-    .header h1 {
-      font-size: 2.8rem;
-      font-weight: 600;
-      letter-spacing: -0.16px;
-    }
-
-    .header p {
-      color: var(--text-white-soft);
-      font-size: 1.4rem;
-      margin-top: var(--space-1);
-    }
-
-    /* Score Circle */
-    .score-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-2);
-    }
-
-    .score-circle {
-      width: 120px;
-      height: 120px;
+      background: var(--green-deep);
+      color: var(--text-on-dark);
+      padding: var(--s5) var(--s4) var(--s4);
       position: relative;
     }
 
-    .score-circle svg {
-      transform: rotate(-90deg);
-    }
-
-    .score-circle-bg {
-      fill: none;
-      stroke: rgba(255,255,255,0.1);
-      stroke-width: 8;
-    }
-
-    .score-circle-progress {
-      fill: none;
-      stroke: var(--gold);
-      stroke-width: 8;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 1s ease;
-    }
-
-    .score-circle.excellent .score-circle-progress { stroke: var(--green-accent); }
-    .score-circle.good .score-circle-progress { stroke: #8bc34a; }
-    .score-circle.fair .score-circle-progress { stroke: var(--yellow); }
-    .score-circle.poor .score-circle-progress { stroke: #ff9800; }
-    .score-circle.critical .score-circle-progress { stroke: var(--red); }
-
-    .score-value {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 3.2rem;
-      font-weight: 600;
-      color: var(--text-white);
-    }
-
-    .score-label {
-      font-size: 1.2rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-white-soft);
-    }
-
-    /* Main Content */
-    .main {
-      max-width: 1200px;
+    .header-inner {
+      max-width: 1100px;
       margin: 0 auto;
-      padding: var(--space-5) var(--space-4);
     }
 
-    /* Section Cards */
-    .section {
-      background: var(--white);
-      border-radius: 12px;
-      box-shadow: var(--shadow-card);
-      margin-bottom: var(--space-4);
-      overflow: hidden;
-    }
-
-    .section-header {
-      padding: var(--space-3) var(--space-4);
-      border-bottom: 1px solid var(--ceramic);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .section-title {
-      font-size: 1.9rem;
-      font-weight: 600;
-      color: var(--starbucks-green);
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-
-    .section-badge {
-      background: var(--green-light);
-      color: var(--starbucks-green);
-      padding: 0.4rem 1.2rem;
-      border-radius: 50px;
-      font-size: 1.3rem;
-      font-weight: 600;
-    }
-
-    .section-content {
-      padding: var(--space-4);
-    }
-
-    /* Summary Stats */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-3);
-      margin-bottom: var(--space-4);
-    }
-
-    .stat-card {
-      background: var(--neutral-cool);
-      border-radius: 12px;
-      padding: var(--space-3);
-      text-align: center;
-      transition: transform 0.2s ease;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-2px);
-    }
-
-    .stat-icon {
-      font-size: 2.4rem;
-      margin-bottom: var(--space-2);
-    }
-
-    .stat-value {
-      font-size: 3.6rem;
-      font-weight: 600;
-      color: var(--starbucks-green);
-      line-height: 1.2;
-    }
-
-    .stat-label {
-      font-size: 1.4rem;
-      color: var(--text-black-soft);
-      margin-top: var(--space-1);
-    }
-
-    /* Issue Cards */
-    .issue-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-    }
-
-    .issue-card {
-      border: 1px solid var(--ceramic);
-      border-radius: 8px;
-      overflow: hidden;
-      transition: box-shadow 0.2s ease;
-    }
-
-    .issue-card:hover {
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .issue-header {
-      padding: var(--space-3);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: var(--space-3);
-    }
-
-    .issue-card.critical .issue-header { background: rgba(200, 32, 20, 0.05); }
-    .issue-card.warning .issue-header { background: rgba(203, 162, 88, 0.08); }
-    .issue-card.suggestion .issue-header { background: rgba(0, 117, 74, 0.05); }
-
-    .issue-title {
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: var(--text-black);
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-
-    .issue-type {
-      font-size: 1.2rem;
-      padding: 0.2rem 0.8rem;
-      border-radius: 4px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .issue-type.skill { background: var(--green-light); color: var(--starbucks-green); }
-    .issue-type.conflict { background: #fff3e0; color: #e65100; }
-    .issue-type.error { background: #ffebee; color: var(--red); }
-
-    .issue-severity {
-      font-size: 1.2rem;
-      padding: 0.4rem 1.2rem;
-      border-radius: 50px;
-      font-weight: 600;
-    }
-
-    .issue-severity.critical {
-      background: var(--red);
-      color: var(--white);
-    }
-
-    .issue-severity.warning {
-      background: var(--gold);
-      color: var(--white);
-    }
-
-    .issue-severity.suggestion {
-      background: var(--green-accent);
-      color: var(--white);
-    }
-
-    .issue-body {
-      padding: var(--space-3);
-    }
-
-    .issue-location {
-      font-size: 1.3rem;
-      color: var(--text-black-soft);
-      margin-bottom: var(--space-2);
-      font-family: monospace;
-      background: var(--neutral-cool);
-      padding: 0.8rem 1.2rem;
-      border-radius: 4px;
-    }
-
-    .issue-description {
-      font-size: 1.5rem;
-      line-height: 1.6;
-      color: var(--text-black);
-    }
-
-    .issue-impact {
-      margin-top: var(--space-3);
-      padding-top: var(--space-3);
-      border-top: 1px dashed var(--ceramic);
-      font-size: 1.3rem;
-      color: var(--text-black-soft);
-    }
-
-    /* Recommendations */
-    .recommendation-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
-
-    .recommendation-item {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-3);
-      padding: var(--space-3);
-      background: var(--neutral-cool);
-      border-radius: 8px;
-    }
-
-    .recommendation-number {
-      width: 28px;
-      height: 28px;
-      background: var(--starbucks-green);
-      color: var(--white);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-
-    .recommendation-content {
-      flex: 1;
-    }
-
-    .recommendation-title {
-      font-weight: 600;
-      color: var(--text-black);
-      margin-bottom: 0.4rem;
-    }
-
-    .recommendation-text {
-      font-size: 1.4rem;
-      color: var(--text-black-soft);
-    }
-
-    /* Chart */
-    .chart-container {
-      height: 200px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      gap: var(--space-4);
-      padding: var(--space-3);
-    }
-
-    .chart-bar {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-2);
-    }
-
-    .chart-bar-fill {
-      width: 60px;
-      border-radius: 8px 8px 0 0;
-      transition: height 0.5s ease;
-    }
-
-    .chart-bar-fill.critical { background: var(--red); }
-    .chart-bar-fill.warning { background: var(--gold); }
-    .chart-bar-fill.suggestion { background: var(--green-accent); }
-
-    .chart-bar-label {
-      font-size: 1.3rem;
-      color: var(--text-black-soft);
-    }
-
-    /* Footer */
-    .footer {
-      background: var(--house-green);
-      color: var(--text-white-soft);
-      padding: var(--space-4);
-      text-align: center;
-      margin-top: var(--space-5);
-    }
-
-    .footer-brand {
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: var(--text-white);
-      margin-bottom: var(--space-2);
-    }
-
-    .footer-text {
-      font-size: 1.3rem;
-    }
-
-    /* Language Switcher */
+    /* Language switcher */
     .lang-switcher {
-      position: absolute;
-      top: var(--space-3);
-      right: var(--space-4);
       display: flex;
-      gap: var(--space-2);
-      z-index: 10;
+      gap: var(--s2);
+      justify-content: flex-end;
+      margin-bottom: var(--s4);
     }
 
     .lang-btn {
-      padding: 0.4rem 1.2rem;
-      border: 1px solid rgba(255,255,255,0.3);
-      background: rgba(255,255,255,0.1);
-      color: var(--text-white);
-      border-radius: 50px;
-      font-size: 1.3rem;
+      padding: 0.3rem 1.0rem;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: transparent;
+      color: var(--text-on-dark-soft);
+      border-radius: var(--r-pill);
+      font-size: 1.2rem;
+      font-family: var(--font);
       cursor: pointer;
-      transition: all 0.2s ease;
-      text-decoration: none;
-      font-family: var(--font-primary);
-      line-height: 1.5;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      line-height: 1.6;
     }
-
-    .lang-btn:hover {
-      background: rgba(255,255,255,0.2);
-    }
-
+    .lang-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-on-dark); }
     .lang-btn.active {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: var(--house-green);
+      background: var(--green-action);
+      border-color: var(--green-action);
+      color: var(--text-on-dark);
       font-weight: 600;
     }
 
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: var(--space-6);
+    /* Header body: title left, score right */
+    .header-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--s5);
+      flex-wrap: wrap;
     }
 
-    .empty-icon {
-      font-size: 6rem;
-      margin-bottom: var(--space-3);
+    .header-title-group { flex: 1; min-width: 0; }
+
+    .header-eyebrow {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: var(--s2);
     }
 
-    .empty-title {
-      font-size: 2.4rem;
-      color: var(--starbucks-green);
-      margin-bottom: var(--space-2);
+    .header-title {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: var(--s2);
     }
 
-    .empty-text {
+    .header-subtitle {
+      font-size: 1.3rem;
+      color: var(--text-on-dark-soft);
+    }
+
+    /* Dimension badges */
+    .header-dims {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s2);
+      margin-top: var(--s3);
+    }
+
+    .dim-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 1.0rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--r-pill);
+      font-size: 1.2rem;
+      color: var(--text-on-dark-soft);
+    }
+
+    .dim-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-light);
+      flex-shrink: 0;
+    }
+
+    /* Score circle */
+    .score-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--s2);
+      flex-shrink: 0;
+    }
+
+    .score-ring {
+      width: 112px;
+      height: 112px;
+      position: relative;
+    }
+
+    .score-ring svg { transform: rotate(-90deg); }
+
+    .score-ring-bg {
+      fill: none;
+      stroke: rgba(255,255,255,0.10);
+      stroke-width: 7;
+    }
+
+    .score-ring-fill {
+      fill: none;
+      stroke-width: 7;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1.1s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* Score ring colors — all chosen for contrast against #1E3932 header */
+    .score-ring.excellent .score-ring-fill { stroke: #6ee7b7; }
+    .score-ring.good      .score-ring-fill { stroke: #86efac; }
+    .score-ring.fair      .score-ring-fill { stroke: #fcd34d; }
+    .score-ring.poor      .score-ring-fill { stroke: #fb923c; }
+    .score-ring.critical  .score-ring-fill { stroke: #f87171; }
+
+    .score-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--text-on-dark);
+      letter-spacing: -0.04em;
+    }
+
+    .score-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-on-dark-soft);
+    }
+
+    /* ── Main layout ────────────────────────────────────────────────────── */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--s5) var(--s4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s4);
+    }
+
+    /* ── Card ───────────────────────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: var(--s3) var(--s4);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--s3);
+    }
+
+    .card-title {
       font-size: 1.5rem;
-      color: var(--text-black-soft);
+      font-weight: 600;
+      color: var(--green-brand);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
     }
 
-    /* Repair Section */
-    .repair-section {
-      background: var(--gold-lightest);
+    .card-title-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .card-badge {
+      background: var(--green-light);
+      color: var(--green-brand);
+      padding: 0.2rem 1.0rem;
+      border-radius: var(--r-pill);
+      font-size: 1.2rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .card-body { padding: var(--s4); }
+
+    /* ── Summary stats ──────────────────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s3);
+    }
+
+    .stat-cell {
+      background: var(--surface-cool);
+      border-radius: var(--r-md);
+      padding: var(--s3) var(--s3) var(--s4);
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    /* CSS severity dot — no emoji */
+    .sev-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 0 auto var(--s2);
+    }
+    .sev-dot.critical   { background: var(--red); }
+    .sev-dot.warning    { background: var(--yellow); }
+    .sev-dot.suggestion { background: var(--green-action); }
+
+    .stat-num {
+      font-size: 3.2rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text);
+      letter-spacing: -0.04em;
+    }
+    .stat-num.has-critical   { color: var(--red); }
+    .stat-num.has-warning    { color: var(--yellow); }
+    .stat-num.has-suggestion { color: var(--green-action); }
+
+    .stat-lbl {
+      font-size: 1.2rem;
+      color: var(--text-soft);
+      margin-top: var(--s1);
+      font-weight: 500;
+    }
+
+    /* Score breakdown */
+    .score-breakdown {
+      margin-top: var(--s3);
+      padding: var(--s2) var(--s3);
+      background: var(--surface-cool);
+      border-radius: var(--r-sm);
+      border: 1px solid var(--border);
+      font-size: 1.3rem;
+      color: var(--text-soft);
+      font-family: var(--font-mono);
+      letter-spacing: 0;
+    }
+
+    .breakdown-label {
+      font-family: var(--font);
+      font-weight: 600;
+      color: var(--text);
+      margin-right: var(--s2);
+    }
+
+    /* ── Distribution chart ─────────────────────────────────────────────── */
+    .chart-area {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: var(--s5);
+      height: 160px;
+      padding: 0 var(--s4) var(--s2);
+    }
+
+    .chart-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--s2);
+      width: 72px;
+    }
+
+    .chart-count {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+
+    .chart-bar-track {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .chart-bar-fill {
+      width: 100%;
+      border-radius: var(--r-sm) var(--r-sm) 0 0;
+      min-height: 4px; /* always visible even at 0 */
+      transition: height 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .chart-bar-fill.critical   { background: var(--red); opacity: 0.85; }
+    .chart-bar-fill.warning    { background: var(--yellow); opacity: 0.85; }
+    .chart-bar-fill.suggestion { background: var(--green-action); opacity: 0.85; }
+
+    .chart-axis {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0 var(--s4);
+    }
+
+    .chart-labels {
+      display: flex;
+      justify-content: center;
+      gap: var(--s5);
+      padding: var(--s2) var(--s4) 0;
+    }
+
+    .chart-label {
+      width: 72px;
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--text-soft);
+      font-weight: 500;
+    }
+
+    /* ── Issue cards ────────────────────────────────────────────────────── */
+    .issue-list { display: flex; flex-direction: column; gap: var(--s3); }
+
+    .issue-card {
+      border-radius: var(--r-md);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: box-shadow 0.15s;
+    }
+    .issue-card:hover { box-shadow: var(--shadow-card-hover); }
+
+    .issue-card.critical   { border-left: 3px solid var(--red); }
+    .issue-card.warning    { border-left: 3px solid var(--yellow); }
+    .issue-card.suggestion { border-left: 3px solid var(--green-action); }
+
+    .issue-head {
+      padding: var(--s3) var(--s3) var(--s3) calc(var(--s3) - 1px);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--s3);
+    }
+
+    .issue-card.critical   .issue-head { background: var(--red-surface); }
+    .issue-card.warning    .issue-head { background: var(--yellow-surface); }
+    .issue-card.suggestion .issue-head { background: var(--sug-surface); }
+
+    .issue-title-row {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      flex-wrap: wrap;
+    }
+
+    .issue-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .type-tag {
+      font-size: 1.1rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: var(--r-sm);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .type-tag.skill    { background: var(--green-light); color: var(--green-brand); }
+    .type-tag.conflict { background: #fff3e0; color: #b45309; }
+    .type-tag.error    { background: #ffebee; color: var(--red); }
+
+    .sev-pill {
+      font-size: 1.1rem;
+      padding: 0.3rem 1.0rem;
+      border-radius: var(--r-pill);
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .sev-pill.critical   { background: var(--red); color: #fff; }
+    .sev-pill.warning    { background: var(--yellow); color: #fff; }
+    .sev-pill.suggestion { background: var(--green-action); color: #fff; }
+
+    .issue-body { padding: var(--s3); }
+
+    .issue-location {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      color: var(--text-soft);
+      background: var(--surface-cool);
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.0rem;
+      border-radius: var(--r-sm);
+      margin-bottom: var(--s2);
+      word-break: break-all;
+    }
+
+    .issue-desc {
+      font-size: 1.4rem;
+      line-height: 1.65;
+      color: var(--text);
+    }
+
+    .issue-impact {
+      margin-top: var(--s3);
+      padding-top: var(--s3);
+      border-top: 1px dashed var(--border);
+      font-size: 1.3rem;
+      color: var(--text-soft);
+    }
+
+    /* ── Healthy state (0 issues) ───────────────────────────────────────── */
+    .healthy-state {
+      padding: var(--s4);
+    }
+
+    .healthy-score-row {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      margin-bottom: var(--s4);
+    }
+
+    .healthy-score-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--green-surface);
+      border: 2px solid var(--green-light);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--green-brand);
+      flex-shrink: 0;
+    }
+
+    .healthy-msg {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--green-brand);
+    }
+
+    .healthy-sub {
+      font-size: 1.3rem;
+      color: var(--text-soft);
+      margin-top: 0.2rem;
+    }
+
+    .checks-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      padding: var(--s2) var(--s3);
+      background: var(--green-surface);
+      border: 1px solid var(--green-light);
+      border-radius: var(--r-md);
+      font-size: 1.4rem;
+      color: var(--text);
+    }
+
+    /* CSS checkmark — no emoji */
+    .check-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--green-action);
+      flex-shrink: 0;
+      position: relative;
+    }
+    .check-icon::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 3px;
+      width: 5px;
+      height: 8px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+
+    /* ── Repair section ─────────────────────────────────────────────────── */
+    .card.repair-card {
       border: 1px solid var(--gold-light);
+      background: var(--gold-surface);
     }
 
-    .repair-section .section-header {
-      background: var(--gold-lightest);
+    .repair-card .card-header {
+      background: var(--gold-surface);
       border-bottom-color: var(--gold-light);
     }
 
-    .repair-section .section-title {
-      color: var(--gold);
-    }
+    .repair-card .card-title { color: var(--gold); }
 
     .fix-code {
-      background: var(--house-green);
-      color: var(--text-white);
-      padding: var(--space-3);
-      border-radius: 8px;
-      font-family: "SF Mono", Monaco, monospace;
-      font-size: 1.3rem;
-      line-height: 1.6;
+      background: var(--green-deep);
+      color: var(--text-on-dark);
+      padding: var(--s3);
+      border-radius: var(--r-sm);
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      line-height: 1.7;
       overflow-x: auto;
-      margin-top: var(--space-2);
+      margin-top: var(--s2);
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        text-align: center;
-      }
+    /* ── Recommendation list ────────────────────────────────────────────── */
+    .rec-list { display: flex; flex-direction: column; gap: var(--s2); }
 
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .rec-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s3);
+      padding: var(--s3);
+      background: var(--surface-cool);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+    }
 
-      .issue-header {
-        flex-direction: column;
-        gap: var(--space-2);
-      }
+    .rec-num {
+      width: 26px;
+      height: 26px;
+      background: var(--green-brand);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .rec-content { flex: 1; }
+
+    .rec-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .rec-text {
+      font-size: 1.3rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────────────── */
+    .footer {
+      background: var(--green-deep);
+      color: var(--text-on-dark-soft);
+      padding: var(--s4);
+      text-align: center;
+      margin-top: var(--s2);
+    }
+
+    .footer-brand {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-on-dark);
+      margin-bottom: var(--s1);
+    }
+
+    .footer-text { font-size: 1.2rem; }
+
+    /* ── Responsive ─────────────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .header-body { flex-direction: column-reverse; align-items: flex-start; }
+      .score-wrap { flex-direction: row; align-items: center; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .stats-row .stat-cell:last-child { grid-column: 1 / -1; }
+      .chart-area { gap: var(--s3); }
+      .chart-col { width: 56px; }
+      .chart-labels { gap: var(--s3); }
+      .chart-label { width: 56px; }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
+
+  <!-- ── Header ── -->
   <header class="header">
-    <div class="lang-switcher">
-      <button class="lang-btn" data-lang="zh" onclick="switchLang('zh')">中文</button>
-      <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
-      <button class="lang-btn" data-lang="ja" onclick="switchLang('ja')">日本語</button>
-      <button class="lang-btn" data-lang="ko" onclick="switchLang('ko')">한국어</button>
-    </div>
-    <div class="header-content">
-      <div class="header-title">
-        <div class="logo">🩺</div>
-        <div>
-          <h1 data-i18n="headerTitle">{{headerTitle}}</h1>
-          <p data-i18n="headerSubtitle">{{headerSubtitle}}</p>
-        </div>
+    <div class="header-inner">
+      <div class="lang-switcher">
+        <button class="lang-btn" data-lang="zh" onclick="switchLang('zh')">中文</button>
+        <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+        <button class="lang-btn" data-lang="ja" onclick="switchLang('ja')">日本語</button>
+        <button class="lang-btn" data-lang="ko" onclick="switchLang('ko')">한국어</button>
       </div>
-      <div class="score-container">
-        <div class="score-circle {{scoreClass}}">
-          <svg width="120" height="120" viewBox="0 0 120 120">
-            <circle class="score-circle-bg" cx="60" cy="60" r="52"/>
-            <circle class="score-circle-progress" cx="60" cy="60" r="52"
-                    stroke-dasharray="326.73" stroke-dashoffset="{{scoreOffset}}"/>
-          </svg>
-          <div class="score-value">{{score}}</div>
+
+      <div class="header-body">
+        <div class="header-title-group">
+          <div class="header-eyebrow">Context Doctor</div>
+          <h1 class="header-title" data-i18n="headerTitle">{{headerTitle}}</h1>
+          <p class="header-subtitle" data-i18n="headerSubtitle">{{headerSubtitle}}</p>
+          <div class="header-dims" id="header-dims">
+            <!-- populated by JS on lang switch -->
+          </div>
         </div>
-        <div class="score-label" data-i18n="scoreLabel">{{scoreLabel}}</div>
+
+        <div class="score-wrap">
+          <div class="score-ring {{scoreClass}}">
+            <svg width="112" height="112" viewBox="0 0 112 112">
+              <circle class="score-ring-bg" cx="56" cy="56" r="48"/>
+              <circle class="score-ring-fill" cx="56" cy="56" r="48"
+                      stroke-dasharray="301.59" stroke-dashoffset="{{scoreOffset}}"/>
+            </svg>
+            <div class="score-value">{{score}}</div>
+          </div>
+          <div class="score-label" data-i18n="scoreLabel">{{scoreLabel}}</div>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- ── Main ── -->
   <main class="main">
-    <!-- Summary Stats -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <span>📊</span>
+
+    <!-- Summary -->
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <svg class="card-title-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="14" height="14" rx="2"/>
+            <path d="M6 9h6M6 12h4M6 6h6"/>
+          </svg>
           <span data-i18n="summaryTitle">{{summaryTitle}}</span>
         </h2>
-        <span class="section-badge">{{totalIssues}} <span data-i18n="issuesLabel">{{issuesLabel}}</span></span>
+        <span class="card-badge">{{totalIssues}} <span data-i18n="issuesLabel">{{issuesLabel}}</span></span>
       </div>
-      <div class="section-content">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon">🔴</div>
-            <div class="stat-value">{{criticalCount}}</div>
-            <div class="stat-label" data-i18n="criticalLabel">{{criticalLabel}}</div>
+      <div class="card-body">
+        <div class="stats-row">
+          <div class="stat-cell">
+            <div class="sev-dot critical"></div>
+            <div class="stat-num {{#if criticalCount}}has-critical{{/if}}">{{criticalCount}}</div>
+            <div class="stat-lbl" data-i18n="criticalLabel">{{criticalLabel}}</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon">🟡</div>
-            <div class="stat-value">{{warningCount}}</div>
-            <div class="stat-label" data-i18n="warningLabel">{{warningLabel}}</div>
+          <div class="stat-cell">
+            <div class="sev-dot warning"></div>
+            <div class="stat-num {{#if warningCount}}has-warning{{/if}}">{{warningCount}}</div>
+            <div class="stat-lbl" data-i18n="warningLabel">{{warningLabel}}</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon">🟢</div>
-            <div class="stat-value">{{suggestionCount}}</div>
-            <div class="stat-label" data-i18n="suggestionLabel">{{suggestionLabel}}</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">📈</div>
-            <div class="stat-value">{{healthTrend}}</div>
-            <div class="stat-label" data-i18n="trendLabel">{{trendLabel}}</div>
+          <div class="stat-cell">
+            <div class="sev-dot suggestion"></div>
+            <div class="stat-num {{#if suggestionCount}}has-suggestion{{/if}}">{{suggestionCount}}</div>
+            <div class="stat-lbl" data-i18n="suggestionLabel">{{suggestionLabel}}</div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Distribution Chart -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <span>📉</span>
-          <span data-i18n="distributionTitle">{{distributionTitle}}</span>
-        </h2>
-      </div>
-      <div class="section-content">
-        <div class="chart-container">
-          <div class="chart-bar">
-            <div class="chart-bar-fill critical" style="height: {{criticalHeight}}%"></div>
-            <div class="chart-bar-label" data-i18n="criticalLabel">{{criticalLabel}}</div>
-          </div>
-          <div class="chart-bar">
-            <div class="chart-bar-fill warning" style="height: {{warningHeight}}%"></div>
-            <div class="chart-bar-label" data-i18n="warningLabel">{{warningLabel}}</div>
-          </div>
-          <div class="chart-bar">
-            <div class="chart-bar-fill suggestion" style="height: {{suggestionHeight}}%"></div>
-            <div class="chart-bar-label" data-i18n="suggestionLabel">{{suggestionLabel}}</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Issues List -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <span>🔍</span>
-          <span data-i18n="issuesTitle">{{issuesTitle}}</span>
-        </h2>
-      </div>
-      <div class="section-content" id="issues-content">
         {{#if hasIssues}}
-        <div class="issue-list">
-          {{#each issues}}
-          <div class="issue-card {{severity}}">
-            <div class="issue-header">
-              <div class="issue-title">
-                <span class="issue-type {{type}}">{{typeLabel}}</span>
-                {{title}}
-              </div>
-              <span class="issue-severity {{severity}}">{{severityLabel}}</span>
-            </div>
-            <div class="issue-body">
-              <div class="issue-location">{{location}}</div>
-              <div class="issue-description">{{description}}</div>
-              {{#if impact}}
-              <div class="issue-impact">
-                <strong>{{impactLabel}}:</strong> {{impact}}
-              </div>
-              {{/if}}
-            </div>
-          </div>
-          {{/each}}
-        </div>
-        {{else}}
-        <div class="empty-state">
-          <div class="empty-icon">✨</div>
-          <h3 class="empty-title" data-i18n="emptyTitle">{{emptyTitle}}</h3>
-          <p class="empty-text" data-i18n="emptyText">{{emptyText}}</p>
+        <div class="score-breakdown">
+          <span class="breakdown-label" data-i18n="breakdownLabel">{{breakdownLabel}}</span>
+          100 − ({{criticalCount}} × 30) − ({{warningCount}} × 15) − ({{suggestionCount}} × 5) = {{score}}
         </div>
         {{/if}}
       </div>
     </section>
 
-    <!-- Repair Section (only for repair report) -->
+    <!-- Distribution — only when there are issues -->
+    {{#if hasIssues}}
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <svg class="card-title-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 15V8M9 15V4M15 15v-6"/>
+          </svg>
+          <span data-i18n="distributionTitle">{{distributionTitle}}</span>
+        </h2>
+      </div>
+      <div class="card-body" style="padding-bottom: var(--s3);">
+        <div class="chart-area">
+          <div class="chart-col">
+            <div class="chart-count">{{criticalCount}}</div>
+            <div class="chart-bar-track">
+              <div class="chart-bar-fill critical" style="height: {{criticalHeight}}%"></div>
+            </div>
+          </div>
+          <div class="chart-col">
+            <div class="chart-count">{{warningCount}}</div>
+            <div class="chart-bar-track">
+              <div class="chart-bar-fill warning" style="height: {{warningHeight}}%"></div>
+            </div>
+          </div>
+          <div class="chart-col">
+            <div class="chart-count">{{suggestionCount}}</div>
+            <div class="chart-bar-track">
+              <div class="chart-bar-fill suggestion" style="height: {{suggestionHeight}}%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-axis"></div>
+        <div class="chart-labels">
+          <div class="chart-label" data-i18n="criticalLabel">{{criticalLabel}}</div>
+          <div class="chart-label" data-i18n="warningLabel">{{warningLabel}}</div>
+          <div class="chart-label" data-i18n="suggestionLabel">{{suggestionLabel}}</div>
+        </div>
+      </div>
+    </section>
+    {{/if}}
+
+    <!-- Issues -->
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <svg class="card-title-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="9" r="7"/>
+            <path d="M9 6v3.5M9 12.5v.5"/>
+          </svg>
+          <span data-i18n="issuesTitle">{{issuesTitle}}</span>
+        </h2>
+      </div>
+      <div id="issues-content">
+        {{#if hasIssues}}
+        <div class="card-body">
+          <div class="issue-list">
+            {{#each issues}}
+            <div class="issue-card {{severity}}">
+              <div class="issue-head">
+                <div class="issue-title-row">
+                  <span class="type-tag {{type}}">{{typeLabel}}</span>
+                  <span class="issue-title">{{title}}</span>
+                </div>
+                <span class="sev-pill {{severity}}">{{severityLabel}}</span>
+              </div>
+              <div class="issue-body">
+                <div class="issue-location">{{location}}</div>
+                <div class="issue-desc">{{description}}</div>
+                {{#if impact}}
+                <div class="issue-impact">
+                  <strong>{{impactLabel}}:</strong> {{impact}}
+                </div>
+                {{/if}}
+              </div>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+        {{else}}
+        <div class="healthy-state" id="healthy-state">
+          <div class="healthy-score-row">
+            <div class="healthy-score-badge">100</div>
+            <div>
+              <div class="healthy-msg" data-i18n="emptyTitle">{{emptyTitle}}</div>
+              <div class="healthy-sub" data-i18n="emptyText">{{emptyText}}</div>
+            </div>
+          </div>
+          <ul class="checks-list" id="checks-list">
+            <!-- populated by JS -->
+          </ul>
+        </div>
+        {{/if}}
+      </div>
+    </section>
+
+    <!-- Repair (repair report only) -->
     {{#if isRepairReport}}
-    <section class="section repair-section" id="repair-section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <span>🔧</span>
+    <section class="card repair-card" id="repair-section">
+      <div class="card-header">
+        <h2 class="card-title">
+          <svg class="card-title-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 3.5L12 6l-1.5-1.5L13 2a3.5 3.5 0 00-4.9 4.9L3 12a1.5 1.5 0 002.1 2.1l5.1-5.1A3.5 3.5 0 0014.5 3.5z"/>
+          </svg>
           <span data-i18n="repairTitle">{{repairTitle}}</span>
         </h2>
       </div>
-      <div class="section-content" id="repair-content">
-        <div class="recommendation-list">
+      <div class="card-body" id="repair-content">
+        <div class="rec-list">
           {{#each fixes}}
-          <div class="recommendation-item">
-            <div class="recommendation-number">{{number}}</div>
-            <div class="recommendation-content">
-              <div class="recommendation-title">{{title}}</div>
-              <div class="recommendation-text">{{description}}</div>
+          <div class="rec-item">
+            <div class="rec-num">{{number}}</div>
+            <div class="rec-content">
+              <div class="rec-title">{{title}}</div>
+              <div class="rec-text">{{description}}</div>
               {{#if code}}
               <pre class="fix-code">{{code}}</pre>
               {{/if}}
@@ -737,53 +895,111 @@
     {{/if}}
 
     <!-- Recommendations -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <span>💡</span>
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <svg class="card-title-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2a5 5 0 015 5c0 2-1 3.5-2.5 4.5V13H6.5v-1.5C5 10.5 4 9 4 7a5 5 0 015-5z"/>
+            <path d="M6.5 15h5M7.5 17h3"/>
+          </svg>
           <span data-i18n="recommendationsTitle">{{recommendationsTitle}}</span>
         </h2>
       </div>
-      <div class="section-content" id="recommendations-content">
-        <div class="recommendation-list">
+      <div class="card-body" id="recommendations-content">
+        <div class="rec-list">
           {{#each recommendations}}
-          <div class="recommendation-item">
-            <div class="recommendation-number">{{number}}</div>
-            <div class="recommendation-content">
-              <div class="recommendation-title">{{title}}</div>
-              <div class="recommendation-text">{{description}}</div>
+          <div class="rec-item">
+            <div class="rec-num">{{number}}</div>
+            <div class="rec-content">
+              <div class="rec-title">{{title}}</div>
+              <div class="rec-text">{{description}}</div>
             </div>
           </div>
           {{/each}}
         </div>
       </div>
     </section>
+
   </main>
 
-  <!-- Footer -->
+  <!-- ── Footer ── -->
   <footer class="footer">
-    <div class="footer-brand">🩺 Context Doctor</div>
+    <div class="footer-brand">Context Doctor</div>
     <p class="footer-text" data-i18n="footerText">{{footerText}}</p>
   </footer>
 
-  <!-- Embedded report data for client-side i18n switching -->
+  <!-- Embedded report data -->
   <script id="report-data" type="application/json">{{reportDataJSON}}</script>
 
   <script>
-    // ── i18n client-side switcher ──────────────────────────────────────────
     const REPORT = (function() {
-      try {
-        return JSON.parse(document.getElementById('report-data').textContent);
-      } catch(e) { return null; }
+      try { return JSON.parse(document.getElementById('report-data').textContent); }
+      catch(e) { return null; }
     })();
 
-    function escapeHtml(str) {
-      if (str == null) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+    // ── Check item labels per language ──────────────────────────────────
+    const CHECK_LABELS = {
+      zh: [
+        'Skill / Plugin 冲突 — 未发现问题',
+        '需求冲突（前后指令矛盾）— 未发现问题',
+        '错误累积风险 — 未发现问题'
+      ],
+      en: [
+        'Skill / Plugin conflicts — None detected',
+        'Requirement conflicts (contradictory instructions) — None detected',
+        'Error accumulation risk — None detected'
+      ],
+      ja: [
+        'スキル / プラグイン競合 — 問題なし',
+        '要件の競合（矛盾する指示）— 問題なし',
+        'エラー蓄積リスク — 問題なし'
+      ],
+      ko: [
+        '스킬 / 플러그인 충돌 — 문제 없음',
+        '요구사항 충돌 (모순된 지시) — 문제 없음',
+        '오류 누적 위험 — 문제 없음'
+      ]
+    };
+
+    // ── Dimension badge labels ───────────────────────────────────────────
+    const DIM_LABELS = {
+      zh: ['Skill / Plugin 冲突', '需求冲突', '错误累积'],
+      en: ['Skill / Plugin Conflicts', 'Requirement Conflicts', 'Error Accumulation'],
+      ja: ['スキル競合', '要件競合', 'エラー蓄積'],
+      ko: ['스킬 충돌', '요구사항 충돌', '오류 누적']
+    };
+
+    // ── Breakdown label ──────────────────────────────────────────────────
+    const BREAKDOWN_LABELS = {
+      zh: '扣分明细:',
+      en: 'Score deductions:',
+      ja: '減点内訳:',
+      ko: '감점 내역:'
+    };
+
+    function escapeHtml(s) {
+      if (s == null) return '';
+      return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function renderHeaderDims(lang) {
+      const el = document.getElementById('header-dims');
+      if (!el) return;
+      const labels = DIM_LABELS[lang] || DIM_LABELS.en;
+      el.innerHTML = labels.map(l =>
+        `<span class="dim-badge"><span class="dim-badge-dot"></span>${escapeHtml(l)}</span>`
+      ).join('');
+    }
+
+    function renderChecksList(lang) {
+      const el = document.getElementById('checks-list');
+      if (!el) return;
+      const labels = CHECK_LABELS[lang] || CHECK_LABELS.en;
+      el.innerHTML = labels.map(l =>
+        `<li class="check-item"><span class="check-icon"></span>${escapeHtml(l)}</li>`
+      ).join('');
     }
 
     function renderIssues(lang) {
@@ -792,62 +1008,68 @@
       if (!container) return;
       const issues = REPORT.issuesByLang[lang] || REPORT.issuesByLang[REPORT.defaultLang] || [];
       const t = REPORT.i18n[lang] || REPORT.i18n[REPORT.defaultLang];
+
       if (issues.length === 0) {
         container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">✨</div>
-            <h3 class="empty-title">${escapeHtml(t.emptyTitle)}</h3>
-            <p class="empty-text">${escapeHtml(t.emptyText)}</p>
+          <div class="healthy-state" id="healthy-state">
+            <div class="healthy-score-row">
+              <div class="healthy-score-badge">100</div>
+              <div>
+                <div class="healthy-msg">${escapeHtml(t.emptyTitle)}</div>
+                <div class="healthy-sub">${escapeHtml(t.emptyText)}</div>
+              </div>
+            </div>
+            <ul class="checks-list" id="checks-list"></ul>
           </div>`;
+        renderChecksList(lang);
         return;
       }
+
       const html = issues.map(issue => `
         <div class="issue-card ${escapeHtml(issue.severity)}">
-          <div class="issue-header">
-            <div class="issue-title">
-              <span class="issue-type ${escapeHtml(issue.type)}">${escapeHtml(issue.typeLabel)}</span>
-              ${escapeHtml(issue.title)}
+          <div class="issue-head">
+            <div class="issue-title-row">
+              <span class="type-tag ${escapeHtml(issue.type)}">${escapeHtml(issue.typeLabel)}</span>
+              <span class="issue-title">${escapeHtml(issue.title)}</span>
             </div>
-            <span class="issue-severity ${escapeHtml(issue.severity)}">${escapeHtml(issue.severityLabel)}</span>
+            <span class="sev-pill ${escapeHtml(issue.severity)}">${escapeHtml(issue.severityLabel)}</span>
           </div>
           <div class="issue-body">
             <div class="issue-location">${escapeHtml(issue.location)}</div>
-            <div class="issue-description">${escapeHtml(issue.description)}</div>
+            <div class="issue-desc">${escapeHtml(issue.description)}</div>
             ${issue.impact ? `<div class="issue-impact"><strong>${escapeHtml(issue.impactLabel)}:</strong> ${escapeHtml(issue.impact)}</div>` : ''}
           </div>
         </div>`).join('');
-      container.innerHTML = `<div class="issue-list">${html}</div>`;
+      container.innerHTML = `<div class="card-body"><div class="issue-list">${html}</div></div>`;
     }
 
     function renderDynamicLists(lang) {
       if (!REPORT) return;
       const t = REPORT.i18n[lang] || REPORT.i18n[REPORT.defaultLang];
 
-      // Repair fixes
       const repairEl = document.getElementById('repair-content');
       if (repairEl && REPORT.fixesByLang) {
         const fixes = REPORT.fixesByLang[lang] || REPORT.fixesByLang[REPORT.defaultLang] || [];
-        repairEl.innerHTML = `<div class="recommendation-list">${fixes.map(f => `
-          <div class="recommendation-item">
-            <div class="recommendation-number">${escapeHtml(f.number)}</div>
-            <div class="recommendation-content">
-              <div class="recommendation-title">${escapeHtml(f.title)}</div>
-              <div class="recommendation-text">${escapeHtml(f.description)}</div>
+        repairEl.innerHTML = `<div class="rec-list">${fixes.map(f => `
+          <div class="rec-item">
+            <div class="rec-num">${escapeHtml(f.number)}</div>
+            <div class="rec-content">
+              <div class="rec-title">${escapeHtml(f.title)}</div>
+              <div class="rec-text">${escapeHtml(f.description)}</div>
               ${f.code ? `<pre class="fix-code">${escapeHtml(f.code)}</pre>` : ''}
             </div>
           </div>`).join('')}</div>`;
       }
 
-      // Recommendations
       const recEl = document.getElementById('recommendations-content');
       if (recEl && REPORT.recommendationsByLang) {
         const recs = REPORT.recommendationsByLang[lang] || REPORT.recommendationsByLang[REPORT.defaultLang] || [];
-        recEl.innerHTML = `<div class="recommendation-list">${recs.map(r => `
-          <div class="recommendation-item">
-            <div class="recommendation-number">${escapeHtml(r.number)}</div>
-            <div class="recommendation-content">
-              <div class="recommendation-title">${escapeHtml(r.title)}</div>
-              <div class="recommendation-text">${escapeHtml(r.description)}</div>
+        recEl.innerHTML = `<div class="rec-list">${recs.map(r => `
+          <div class="rec-item">
+            <div class="rec-num">${escapeHtml(r.number)}</div>
+            <div class="rec-content">
+              <div class="rec-title">${escapeHtml(r.title)}</div>
+              <div class="rec-text">${escapeHtml(r.description)}</div>
             </div>
           </div>`).join('')}</div>`;
       }
@@ -857,45 +1079,44 @@
       if (!REPORT || !REPORT.i18n[lang]) return;
       const t = REPORT.i18n[lang];
 
-      // Update html lang attribute
       document.documentElement.lang = lang;
 
-      // Update active button
       document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
       });
 
-      // Update all data-i18n elements
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         if (t[key] !== undefined) el.textContent = t[key];
       });
 
-      // Re-render dynamic content
+      renderHeaderDims(lang);
       renderIssues(lang);
       renderDynamicLists(lang);
 
-      // Persist preference
+      // Update breakdown label if visible
+      const blEl = document.querySelector('.breakdown-label');
+      if (blEl) blEl.textContent = BREAKDOWN_LABELS[lang] || BREAKDOWN_LABELS.en;
+
       try { localStorage.setItem('contextdoctor-lang', lang); } catch(e) {}
     }
 
-    // Animate score circle on load
     document.addEventListener('DOMContentLoaded', function() {
-      const progress = document.querySelector('.score-circle-progress');
-      if (progress) {
-        const finalOffset = progress.getAttribute('stroke-dashoffset');
-        progress.style.strokeDashoffset = '326.73';
-        setTimeout(() => {
-          progress.style.strokeDashoffset = finalOffset;
-        }, 100);
+      // Animate score ring
+      const fill = document.querySelector('.score-ring-fill');
+      if (fill) {
+        const target = fill.getAttribute('stroke-dashoffset');
+        fill.style.strokeDashoffset = '301.59';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          fill.style.strokeDashoffset = target;
+        }));
       }
 
-      // Apply saved language preference (or default from report)
       if (REPORT) {
-        let savedLang;
-        try { savedLang = localStorage.getItem('contextdoctor-lang'); } catch(e) {}
-        const initLang = (savedLang && REPORT.i18n[savedLang]) ? savedLang : REPORT.defaultLang;
-        switchLang(initLang);
+        let saved;
+        try { saved = localStorage.getItem('contextdoctor-lang'); } catch(e) {}
+        const lang = (saved && REPORT.i18n[saved]) ? saved : REPORT.defaultLang;
+        switchLang(lang);
       }
     });
   </script>

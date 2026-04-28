@@ -68,6 +68,31 @@ function detectFrameworks() {
   return frameworks;
 }
 
+async function installSharedAssets() {
+  // Deploy contextdoctor.mjs and report-template.html to ~/.contextdoctor/
+  const scriptsDir = resolve(homedir(), '.contextdoctor/scripts');
+  const assetsDir = resolve(homedir(), '.contextdoctor/assets');
+  const reportsDir = resolve(homedir(), '.contextdoctor/reports');
+
+  for (const dir of [scriptsDir, assetsDir, reportsDir]) {
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+  }
+
+  copyFileSync(
+    resolve(rootDir, 'plugins/contextdoctor/scripts/contextdoctor.mjs'),
+    resolve(scriptsDir, 'contextdoctor.mjs')
+  );
+  copyFileSync(
+    resolve(rootDir, 'plugins/contextdoctor/assets/report-template.html'),
+    resolve(assetsDir, 'report-template.html')
+  );
+
+  log('✅ Shared assets installed to ~/.contextdoctor/', 'green');
+  log('   Script : ~/.contextdoctor/scripts/contextdoctor.mjs');
+  log('   Template: ~/.contextdoctor/assets/report-template.html');
+  log('   Reports : ~/.contextdoctor/reports/');
+}
+
 async function installForClaude() {
   log('\n📦 Installing for Claude Code...', 'cyan');
 
@@ -230,6 +255,9 @@ async function main() {
   }
 
   log(`✅ Detected frameworks: ${frameworks.join(', ')}`, 'green');
+
+  // Always install shared assets first
+  await installSharedAssets();
 
   for (const framework of frameworks) {
     switch (framework) {

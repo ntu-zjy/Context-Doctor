@@ -47,6 +47,7 @@ const i18n = {
     emptyText: '您的上下文健康状况良好，继续保持！',
     repairTitle: '修复方案',
     recommendationsTitle: '优化建议',
+    breakdownLabel: '扣分明细:',
     footerText: 'Context Doctor - 守护您的对话上下文健康',
     scoreLabels: {
       excellent: '优秀',
@@ -71,6 +72,7 @@ const i18n = {
     emptyText: 'Your context is healthy. Keep it up!',
     repairTitle: 'Repair Solutions',
     recommendationsTitle: 'Recommendations',
+    breakdownLabel: 'Score deductions:',
     footerText: 'Context Doctor - Guarding your conversation context health',
     scoreLabels: {
       excellent: 'Excellent',
@@ -95,6 +97,7 @@ const i18n = {
     emptyText: 'コンテキストは健康な状態です！',
     repairTitle: '修正案',
     recommendationsTitle: '最適化提案',
+    breakdownLabel: '減点内訳:',
     footerText: 'Context Doctor - 対話コンテキストの健康を守る',
     scoreLabels: {
       excellent: '優秀',
@@ -119,6 +122,7 @@ const i18n = {
     emptyText: '컨텍스트가 건강한 상태입니다!',
     repairTitle: '수정 방안',
     recommendationsTitle: '최적화 제안',
+    breakdownLabel: '감점 내역:',
     footerText: 'Context Doctor - 대화 컨텍스트 건강 지킴이',
     scoreLabels: {
       excellent: '우수',
@@ -293,6 +297,7 @@ class ContextDoctor {
         emptyText: t.emptyText,
         repairTitle: t.repairTitle,
         recommendationsTitle: t.recommendationsTitle,
+        breakdownLabel: t.breakdownLabel,
         footerText: t.footerText
       };
     });
@@ -333,8 +338,7 @@ class ContextDoctor {
       criticalLabel: this.text.criticalLabel,
       warningLabel: this.text.warningLabel,
       suggestionLabel: this.text.suggestionLabel,
-      healthTrend: '→',
-      trendLabel: this.text.trendLabel,
+      breakdownLabel: this.text.breakdownLabel,
 
       distributionTitle: this.text.distributionTitle,
       criticalHeight: (criticalCount / maxCount) * 100,
@@ -444,11 +448,17 @@ function renderTemplate(template, data) {
 
 // 生成 HTML
 function generateHTML(data) {
-  const templatePath = resolve(__dirname, '../assets/report-template.html');
+  // 查找模板：优先相对路径（开发环境），回退到 ~/.contextdoctor/assets/（安装后）
+  const candidatePaths = [
+    resolve(__dirname, '../assets/report-template.html'),
+    resolve(homedir(), '.contextdoctor/assets/report-template.html')
+  ];
 
-  if (existsSync(templatePath)) {
-    const template = readFileSync(templatePath, 'utf-8');
-    return renderTemplate(template, data);
+  for (const templatePath of candidatePaths) {
+    if (existsSync(templatePath)) {
+      const template = readFileSync(templatePath, 'utf-8');
+      return renderTemplate(template, data);
+    }
   }
 
   // 回退到简单 HTML

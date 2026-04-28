@@ -34,6 +34,10 @@
     "url": "https://github.com/contextdoctor/contextdoctor/issues"
   },
   "homepage": "https://contextdoctor.dev",
+  "jest": {
+    "testMatch": ["**/tests/**/*.test.mjs"],
+    "transform": {}
+  },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "eslint": "^8.57.0",

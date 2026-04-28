@@ -128,27 +128,33 @@ cp plugins/contextdoctor/commands/contextdoctor.md ~/.config/opencode/commands/
 ## 📊 보고서 미리보기
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="건강 점수 개요">
+  <img src="img/screenshot_cc_conversation.png" width="800" alt="CLI 사용 예시">
   <br>
-  <em>종합 건강 점수 개요 — 컨텍스트 상태를 한눈에 파악</em>
+  <em>Claude Code에서 <code>/contextdoctor</code> 실행 — 원클릭으로 HTML 시각 보고서 생성</em>
 </p>
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="다국어 전환">
+  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="건강 점수 개요">
   <br>
-  <em>다국어 인터페이스 — 중국어/영어/일본어/한국어 원클릭 전환</em>
+  <em>종합 건강 점수 개요 — 컨텍스트 상태를 한눈에 파악, 링 색상이 심각도에 따라 변화</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="점수 내역 및 문제 분포">
+  <br>
+  <em>점수 감점 내역 + 문제 분포 차트 — 문제가 있을 때만 표시</em>
 </p>
 
 <p align="center">
   <img src="img/Snipaste_2026-04-27_16-50-33.png" width="800" alt="문제 상세 목록">
   <br>
-  <em>문제 상세 목록 — 빨간색(심각), 금색(경고), 녹색(제안) 단계별 표시</em>
+  <em>문제 상세 목록 — 빨간색(심각), 금색(경고), 녹색(제안) 단계별 표시, CSS 인디케이터로 이모지 대체</em>
 </p>
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="복구 솔루션">
+  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="다국어 전환">
   <br>
-  <em>/repair 명령어 — 즉시 사용 가능한 구체적인 복구 솔루션 제공</em>
+  <em>다국어 인터페이스 — 중국어/영어/일본어/한국어 원클릭 전환, 설정 자동 유지</em>
 </p>
 
 보고서 기능:

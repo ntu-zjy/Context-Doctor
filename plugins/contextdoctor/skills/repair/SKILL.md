@@ -81,12 +81,30 @@ effort: high
 
 ## 报告输出
 
-报告文件路径：`$ARGUMENTS` 或默认 `context-doctor-repair-report.html`
+### 生成方式
 
-报告结构：
+**必须**通过调用 `contextdoctor.mjs` 脚本生成报告，禁止自行拼接 HTML：
+
+```bash
+SCRIPT="$HOME/.contextdoctor/scripts/contextdoctor.mjs"
+node "$SCRIPT" repair --lang=<lang> [--output=<自定义路径>] [--auto-fix]
+```
+
+脚本使用与 contextdoctor 相同的 `assets/report-template.html` 模板（`isRepairReport=true` 启用修复区块），确保两种报告视觉完全一致。
+
+### 路径规范
+
+- 默认保存目录：`~/.contextdoctor/reports/`
+- 命名格式：`context-doctor-repair-{YYYY-MM-DDTHH-mm-ss}-{lang}.html`
+- 自定义路径：通过 `--output` 参数指定，覆盖默认路径
+- 框架区分：文件名中 `repair` 固定标识修复报告（contextdoctor 检测报告使用 `report`）
+
+### 报告结构
+
+由模板统一渲染，包含以下部分：
 1. **执行摘要**：检测概览 + 修复概览
-2. **污染详情**：同 contextdoctor
-3. **修复方案**：按优先级排序的修复建议
+2. **污染详情**：同 contextdoctor（相同模板区块）
+3. **修复方案**：按优先级排序的修复建议（`isRepairReport=true` 时渲染）
 4. **一键修复**：可直接使用的修复文本集合
 5. **预防措施**：避免未来污染的建议
 

@@ -128,27 +128,33 @@ In addition to the detection report, provides:
 ## 📊 Report Preview
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="Health Score Overview">
+  <img src="img/screenshot_cc_conversation.png" width="800" alt="CLI Usage Example">
   <br>
-  <em>Comprehensive health score overview — grasp context status at a glance</em>
+  <em>Run <code>/contextdoctor</code> directly in Claude Code — generates an HTML visual report in one click</em>
 </p>
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="Multi-language Switching">
+  <img src="img/Snipaste_2026-04-27_16-49-33.png" width="800" alt="Health Score Overview">
   <br>
-  <em>Multi-language interface — switch between Chinese/English/Japanese/Korean with one click</em>
+  <em>Comprehensive health score overview — grasp context status at a glance, ring color adapts to severity</em>
+</p>
+
+<p align="center">
+  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="Score Breakdown and Distribution">
+  <br>
+  <em>Score deduction breakdown + issue distribution chart — only shown when issues exist</em>
 </p>
 
 <p align="center">
   <img src="img/Snipaste_2026-04-27_16-50-33.png" width="800" alt="Issue Detail List">
   <br>
-  <em>Issue detail list — tiered display with Red (Critical), Gold (Warning), Green (Suggestion)</em>
+  <em>Issue detail list — tiered display with Red (Critical), Gold (Warning), Green (Suggestion); CSS indicators replace emoji</em>
 </p>
 
 <p align="center">
-  <img src="img/Snipaste_2026-04-27_16-50-48.png" width="800" alt="Repair Solutions">
+  <img src="img/Snipaste_2026-04-27_16-50-19.png" width="800" alt="Multi-language Switching">
   <br>
-  <em>/repair command — provides specific, ready-to-use fix solutions</em>
+  <em>Multi-language interface — switch between Chinese/English/Japanese/Korean with one click, preference persisted automatically</em>
 </p>
 
 Report Features:
