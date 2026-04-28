@@ -2,7 +2,13 @@
 
 /**
  * Context Doctor CLI
- * 上下文污染检测与修复工具
+ * 上下文污染检测报告生成工具
+ *
+ * 使用方式:
+ *   node contextdoctor.mjs check --data='<json>' [--lang=zh|en|ja|ko] [--output=path]
+ *
+ * 注意：此脚本仅负责渲染报告，不执行自动检测。
+ * 分析工作必须由调用方（Agent）完成，通过 --data 参数传入结果。
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
@@ -366,6 +372,31 @@ class ContextDoctor {
   }
 }
 
+// 解析 --data 参数（支持 JSON 字符串或文件路径）
+function parseDataArg(args) {
+  const dataArg = args.find(a => a.startsWith('--data='))?.split('=')[1] ||
+                  args.find(a => a.startsWith('-d='))?.split('=')[1];
+
+  if (!dataArg) {
+    return null;
+  }
+
+  try {
+    // 尝试直接解析 JSON
+    return JSON.parse(dataArg);
+  } catch (e) {
+    // 如果解析失败，尝试作为文件路径读取
+    try {
+      const content = readFileSync(resolve(dataArg), 'utf-8');
+      return JSON.parse(content);
+    } catch (fileErr) {
+      console.error('Error: Unable to parse --data argument as JSON or file');
+      console.error('Make sure to properly escape the JSON string when passing via command line');
+      process.exit(1);
+    }
+  }
+}
+
 // CLI 主函数
 async function main() {
   const args = process.argv.slice(2);
@@ -377,6 +408,9 @@ async function main() {
   const customOutput = args.find(a => a.startsWith('--output='))?.split('=')[1] ||
                        args.find(a => a.startsWith('-o='))?.split('=')[1];
   const autoFix = args.includes('--auto-fix') || args.includes('-f');
+
+  // 解析外部传入的分析数据
+  const externalData = parseDataArg(args);
 
   // 确保报告目录存在
   ensureReportsDir();
@@ -393,8 +427,27 @@ async function main() {
 
   const doctor = new ContextDoctor(options);
 
-  // 模拟检测（实际实现中这里会分析真实上下文）
-  // doctor.addIssue('skill', 'warning', '示例问题', '这是一个示例问题描述', 'location', '影响范围');
+  // 如果传入了外部分析数据，使用它；否则保持空状态（由调用方决定）
+  if (externalData) {
+    // 使用 Agent 传入的分析结果
+    if (externalData.issues && Array.isArray(externalData.issues)) {
+      for (const issue of externalData.issues) {
+        doctor.addIssue(
+          issue.type || 'error',
+          issue.severity || 'warning',
+          issue.title || '未命名问题',
+          issue.description || '',
+          issue.location || '',
+          issue.impact || ''
+        );
+      }
+    }
+    // 允许覆盖分数
+    if (typeof externalData.score === 'number') {
+      doctor.score = Math.max(0, Math.min(100, externalData.score));
+    }
+  }
+  // 注意：不再自动检测，必须由 Agent 传入数据或保持空状态
 
   const report = doctor.generateReport(command === 'repair');
 

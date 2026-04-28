@@ -32,14 +32,22 @@ effort: high
 - **过度推断**：从有限信息推断出错误结论并持续使用
 - **信息丢失**：重要上下文在压缩过程中丢失
 
-## 分析流程
+## ⚠️ 重要：分析流程
+
+**禁止**直接使用脚本进行自动诊断。你必须：
+
+1. **先自行分析上下文** —— 仔细阅读对话历史，识别真实的污染问题
+2. **将分析结果传给脚本** —— 使用 `--data` 参数传递 JSON 格式的分析结果
+3. **脚本只负责渲染** —— 脚本仅用于生成 HTML 报告，不做任何自动检测
+
+### 详细步骤
 
 1. **收集上下文**
    - 回顾完整对话历史
    - 识别已加载的 skills 和插件
    - 提取用户所有明确和隐含的指令
 
-2. **执行检测**
+2. **执行检测（自行分析）**
    - 对每种污染类型执行专项检测
    - 标记污染位置和严重程度
    - 计算污染影响范围
@@ -47,12 +55,11 @@ effort: high
 3. **生成评分**
    - 综合健康评分（0-100）
    - 各维度分项评分
-   - 趋势分析（如果有历史数据）
 
-4. **输出报告**
-   - 生成 HTML 可视化报告
+4. **输出报告（通过脚本渲染）**
+   - 构建 JSON 格式的分析结果
+   - 调用脚本生成 HTML 可视化报告
    - 采用 Starbucks 设计系统
-   - 包含修复建议
 
 ## 评分标准
 
@@ -68,17 +75,34 @@ effort: high
 
 ### 生成方式
 
-**必须**通过调用 `contextdoctor.mjs` 脚本生成报告，禁止自行拼接 HTML：
+**必须**通过调用 `contextdoctor.mjs` 脚本生成报告，禁止自行拼接 HTML。
+
+脚本**仅负责渲染**，你必须传入已完成的分析结果：
 
 ```bash
 # 1. 找到脚本路径（安装时已写入 ~/.contextdoctor/scripts/）
 SCRIPT="$HOME/.contextdoctor/scripts/contextdoctor.mjs"
 
-# 2. 将分析结果以 JSON 格式写入临时文件，再调用脚本渲染
-node "$SCRIPT" check --lang=<lang> [--output=<自定义路径>]
+# 2. 将你的分析结果构建为 JSON
+DATA='{
+  "score": 85,
+  "issues": [
+    {
+      "type": "skill|conflict|error",
+      "severity": "critical|warning|suggestion",
+      "title": "问题标题",
+      "description": "详细描述",
+      "location": "问题位置",
+      "impact": "影响范围"
+    }
+  ]
+}'
+
+# 3. 调用脚本渲染报告（传入 --data 参数）
+node "$SCRIPT" check --lang=<lang> --data="$DATA" [--output=<自定义路径>]
 ```
 
-脚本会自动读取 `assets/report-template.html` 模板并渲染，确保所有报告视觉一致。
+脚本会读取你的分析数据，使用 `assets/report-template.html` 模板渲染，确保所有报告视觉一致。
 
 ### 路径规范
 
